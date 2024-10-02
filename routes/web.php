@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\UserController;
+use App\Exports\KeluargaExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route for listing users
@@ -35,10 +37,20 @@ Route::middleware('auth')->group(function () {
 });
 
 
+
+Route::get('/keluarga/export/{id}', function ($id) {
+    return Excel::download(new KeluargaExport($id), 'keluarga_'.$id.'.xlsx');
+})->name('keluarga.export');
+
 Route::get('/keluarga', [KeluargaController::class, 'index'])->name('keluarga');
 Route::get('/keluarga/create', [KeluargaController::class, 'create'])->name('keluarga.create');
 Route::post('/keluarga', [KeluargaController::class, 'store'])->name('keluarga.store');
 Route::get('/keluarga/{id}', [KeluargaController::class, 'show']);
+
+// Tambahan rute untuk edit, update, dan destroy
+Route::get('/keluarga/{id}/edit', [KeluargaController::class, 'edit'])->name('keluarga.edit');
+Route::put('/keluarga/{id}', [KeluargaController::class, 'update'])->name('keluarga.update');
+Route::delete('/keluarga/{id}', [KeluargaController::class, 'destroy'])->name('keluarga.destroy');
 
 
 require __DIR__.'/auth.php';

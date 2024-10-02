@@ -84,6 +84,18 @@ class KeluargaController extends Controller
     }
     
     
+    // Fungsi Hapus untuk menghapus data keluarga
+    public function destroy($id)
+    {
+        // Ambil data keluarga berdasarkan ID
+        $keluarga = Keluarga::findOrFail($id);
 
+        // Hapus data keluarga beserta anggota keluarganya
+        $keluarga->anggotaKeluarga()->delete();
+        $keluarga->delete();
+
+        // Redirect ke halaman keluarga setelah berhasil dihapus
+        return redirect()->route('keluarga')->with('success', 'Data keluarga dan anggota berhasil dihapus.');
+    }
 }
 

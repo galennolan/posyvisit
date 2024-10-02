@@ -36,7 +36,7 @@
                                 <tr class="hover:bg-gray-50 transition duration-200">
                                     <td class="px-4 py-2 text-sm text-gray-500">{{ $index + 1 }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-700">{{ $keluarga->anggotaKeluarga->first()->nama_lengkap ?? '-' }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-700">{{ $keluarga->alamat }}</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700">{{ \Illuminate\Support\Str::limit($keluarga->alamat, 35, '...') }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-700">{{ $keluarga->no_handphone }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-700">
                                         <ul class="list-disc pl-5">
@@ -45,7 +45,7 @@
                                             @endforeach
                                         </ul>
                                     </td>
-                                    <td class="px-4 py-2 flex space-x-2">
+                                    <td class="px-4 py-2 flex justify-center items-center space-x-2">
                                             <!-- Tombol untuk menampilkan modal detail (ikon kaca pembesar) -->
                                             <button class="text-blue-500 hover:text-blue-700" onclick="showKeluargaDetail({{ $keluarga->id }})">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
@@ -53,12 +53,22 @@
                                                 </svg>
                                             </button>
 
-                                            <!-- Tombol untuk ikon cetak -->
-                                            <button class="text-blue-500 hover:text-blue-700" onclick="printKeluargaDetail({{ $keluarga->id }})">
+                                           <!-- Tombol untuk ikon cetak ke Excel berdasarkan ID -->
+                                            <a href="{{ route('keluarga.export', ['id' => $keluarga->id]) }}" class="text-blue-500 hover:text-blue-700" title="Cetak ke Excel">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7V4a2 2 0 00-2-2H7a2 2 0 00-2 2v3M5 10h14a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2zm4 5h6" />
                                                 </svg>
-                                            </button>
+                                            </a>
+                                              <!-- Tombol Hapus -->
+                                            <form action="{{ route('keluarga.destroy', ['id' => $keluarga->id]) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-500 hover:text-red-700" title="Hapus Keluarga">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
                                         </td>
 
                                 </tr>
