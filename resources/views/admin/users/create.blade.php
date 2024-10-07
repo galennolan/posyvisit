@@ -85,6 +85,7 @@
 
                         <!-- Submit Button -->
                         <div>
+                        <a href="{{ route('admin.users.index') }}" class="bg-red-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-gray-600">Batal</a>
                             <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200">Buat User</button>
                         </div>
                     </form>

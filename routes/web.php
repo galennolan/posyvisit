@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Exports\KeluargaExport;
 use Maatwebsite\Excel\Facades\Excel;
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin|PetugasKesehatan'])->group(function () {
     // Route for listing users
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
     // Route for creating a new user
@@ -36,8 +36,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-
 
 Route::get('/keluarga/export/{id}', function ($id) {
     return Excel::download(new KeluargaExport($id), 'keluarga_'.$id.'.xlsx');

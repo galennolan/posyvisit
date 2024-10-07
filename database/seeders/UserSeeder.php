@@ -17,7 +17,9 @@ class UserSeeder extends Seeder
     {
         // Membuat role
         $adminRole = Role::create(['name' => 'admin']);
-        $userRole = Role::create(['name' => 'user']);
+        $petugasKesehatanRole = Role::create(['name' => 'PetugasKesehatan']);
+        $ketuaPosyanduRole = Role::create(['name' => 'KetuaPosyandu']);
+        $kaderRole = Role::create(['name' => 'Kader']);
 
         // Membuat pengguna admin
         $admin = User::create([
@@ -26,19 +28,42 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'), // Ganti dengan password yang diinginkan
             'kecamatan' => 'Banjarsari',
             'kelurahan' => 'Banjarsari',
-            'nama_posyandu' => 'Posyandu A', // Ganti dengan data yang sesuai
+            'nama_posyandu' => 'Posyandu A',
         ]);
         $admin->assignRole($adminRole);
 
-        // Membuat pengguna reguler
-        $user = User::create([
-            'name' => 'Regular User',
-            'email' => 'user@posyvisit.com',
+        // Membuat pengguna PetugasKesehatan
+        $petugasKesehatan = User::create([
+            'name' => 'Petugas Kesehatan',
+            'email' => 'petugaskesehatan@posyvisit.com',
             'password' => bcrypt('password'),
-            'kecamatan' => 'Jebres',
-            'kelurahan' => 'Kadipiro',
-            'nama_posyandu' => 'Posyandu B', // Ganti dengan data yang sesuai
+            'kecamatan' => 'Laweyan',
+            'kelurahan' => 'Purwosari',
+            'nama_posyandu' => 'Posyandu C',
         ]);
-        $user->assignRole($userRole);
+        $petugasKesehatan->assignRole($petugasKesehatanRole);
+
+        // Membuat pengguna KetuaPosyandu
+        $ketuaPosyandu = User::create([
+            'name' => 'Ketua Posyandu',
+            'email' => 'ketuaposyandu@posyvisit.com',
+            'password' => bcrypt('password'),
+            'kecamatan' => 'Serengan',
+            'kelurahan' => 'Serengan',
+            'nama_posyandu' => 'Posyandu D',
+        ]);
+        $ketuaPosyandu->assignRole($ketuaPosyanduRole);
+
+        // Membuat pengguna Kader
+        $kader = User::create([
+            'name' => 'Kader Posyandu',
+            'email' => 'kader@posyvisit.com',
+            'password' => bcrypt('password'),
+            'kecamatan' => 'Serengan',
+            'kelurahan' => 'Serengan',
+            'nama_posyandu' => 'Posyandu D',
+        ]);
+        $kader->assignRole($kaderRole);
     }
+
 }

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -30,9 +31,9 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'exists:roles,name'], // Memastikan role yang dipilih valid
-            'kecamatan' => $request->kecamatan, // Simpan kecamatan
-            'kelurahan' => $request->kelurahan, // Simpan kelurahan
-            'nama_posyandu' => $request->nama_posyandu, // Simpan nama posyandu
+            'kecamatan' => ['required', 'string', 'max:255'], // Simpan kecamatan
+            'kelurahan' => ['required', 'string', 'max:255'], // Simpan kelurahan
+            'nama_posyandu' => 'nullable|string',
         ]);
 
         // Membuat user baru
@@ -57,9 +58,24 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->get();
+        $user = Auth::user();
+
+        // Jika user adalah admin, tampilkan semua user
+        if ($user->hasRole('admin')) {
+            $users = User::with('roles')->get();
+        } 
+        // Jika user adalah PetugasKesehatan, tampilkan user dengan kecamatan yang sama
+        else if ($user->hasRole('PetugasKesehatan')) {
+            $users = User::with('roles')->where('kecamatan', $user->kecamatan)->get();
+        } 
+        // Jika bukan admin atau PetugasKesehatan, kosongkan hasil atau sesuaikan logika lainnya
+        else {
+            $users = collect([]); // Hasil kosong
+        }
+
         return view('admin.users.index', compact('users'));
     }
+
     public function edit(User $user)
     {
         $roles = Role::all(); // Get all roles for the dropdown

@@ -22,16 +22,26 @@ class KeluargaController extends Controller
         if ($user->hasRole('admin')) {
             // Jika admin, ambil semua data keluarga beserta anggotanya
             $keluargas = Keluarga::with('anggotaKeluarga')->get();
-        } else if ($user->hasRole('user')) {
-            // Jika bukan admin, hanya ambil data keluarga sesuai dengan kelurahan user
+        } else if ($user->hasRole('Kader')) {
+            // Ambil data keluarga berdasarkan kecamatan dan kelurahan pengguna
             $keluargas = Keluarga::with('anggotaKeluarga')
-            ->where('id_user', $user->id) // Memfilter berdasarkan id_user
+            ->whereHas('user', function ($query) use ($user) {
+                $query->where('kecamatan', '=', $user->kecamatan)
+                    ->where('kelurahan', '=', $user->kelurahan);
+            })
+        ->get();
+        } else if ($user->hasRole('PetugasKesehatan')) {
+            // Jika bukan admin, hanya ambil data keluarga sesuai dengan kelurahan user
+             $keluargas = Keluarga::with('anggotaKeluarga')
+            ->whereHas('user', function ($query) use ($user) {
+                $query->where('kecamatan', $user->kecamatan)
+                      ->where('kelurahan', $user->kelurahan);
+            })
             ->get();
         } else {
             // Jika tidak memiliki role yang tepat, tampilkan data kosong atau redirect
             $keluargas = collect([]);
         }
-
         // Kirim data ke view
         return view('keluarga.index', compact('keluargas'));
     }
@@ -45,13 +55,28 @@ class KeluargaController extends Controller
         $tanggalMulai = $request->input('tanggal_mulai', null);
         $tanggalAkhir = $request->input('tanggal_akhir', null);
 
-        // Logika untuk memfilter data
+        // Definisikan query awal untuk Keluarga
+        $query = Keluarga::with('anggotaKeluarga');
+
+        // Cek peran pengguna dan tambahkan filter berdasarkan peran
         if ($user->hasRole('admin')) {
-            $query = Keluarga::with('anggotaKeluarga');
-        } else if ($user->hasRole('user')) {
-            $query = Keluarga::with('anggotaKeluarga')->where('id_user', $user->id);
+            // Jika admin, ambil semua data keluarga tanpa filter tambahan
+        } else if ($user->hasRole('Kader')) {
+            // Filter untuk peran Kader
+            $query->whereHas('user', function ($subQuery) use ($user) {
+                $subQuery->where('kecamatan', '=', $user->kecamatan)
+                        ->where('kelurahan', '=', $user->kelurahan);
+            });
+        } else if ($user->hasRole('PetugasKesehatan')) {
+            // Filter untuk peran PetugasKesehatan
+            $query->whereHas('user', function ($subQuery) use ($user) {
+                $subQuery->where('kecamatan', $user->kecamatan)
+                        ->where('kelurahan', $user->kelurahan);
+            });
         } else {
-            $query = collect([]);
+            // Jika tidak memiliki role yang tepat, kembalikan koleksi kosong
+            $keluargas = collect([]);
+            return view('keluarga.index', compact('keluargas', 'tanggalMulai', 'tanggalAkhir'));
         }
 
         // Tambahkan filter berdasarkan tanggal jika ada
@@ -59,17 +84,21 @@ class KeluargaController extends Controller
             $query->whereBetween('tanggal_pengumpulan_data', [$tanggalMulai, $tanggalAkhir]);
         }
 
-        // Ambil hasil query
+        // Eksekusi query dan ambil hasilnya
         $keluargas = $query->get();
 
-         // Kirim data ke view
-          return view('keluarga.index', compact('keluargas', 'tanggalMulai', 'tanggalAkhir'));
+        // Kirim data ke view
+        return view('keluarga.index', compact('keluargas', 'tanggalMulai', 'tanggalAkhir'));
     }
+
 
     public function create()
     {
-        // Menampilkan view form input keluarga
-        return view('keluarga.create');
+        if (auth()->user()->hasRole('Kader')) {
+            return view('keluarga.create');
+        }
+    
+        abort(403, 'Yang Bisa Input Data hanya Kader.');
     }
 
     public function show($id)

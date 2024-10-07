@@ -80,26 +80,27 @@
                                     </td>
                                     <td class="px-4 py-2 flex justify-center items-center space-x-2">
                                             <!-- Tombol untuk menampilkan modal detail (ikon kaca pembesar) -->
-                                            <button class="text-blue-500 hover:text-blue-700" onclick="showKeluargaDetail({{ $keluarga->id }})">
+                                            <button class="text-blue-500 hover:text-blue-700" onclick="showKeluargaDetail({{ $keluarga->id }})" title="Lihat Detail Keluarga">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a4 4 0 11-8 0 4 4 0 018 0zM21 21l-4.35-4.35" />
                                                 </svg>
                                             </button>
 
-                                            <!-- Tombol untuk mengedit keluarga -->
+                                           <!-- Tombol untuk mengedit keluarga -->
                                             <a href="{{ route('keluarga.edit', $keluarga->id) }}" class="text-yellow-500 hover:text-yellow-700" title="Edit Keluarga">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h4l3 3-7 7-4-4 3-3V7z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 7l-4 4m-4 4l4-4m0 0l-4 4" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3l-9.5 9.5-4 1 1-4 9.5-9.5z" />
                                                 </svg>
                                             </a>
 
-                                           <!-- Tombol untuk ikon cetak ke Excel berdasarkan ID -->
-                                            <a href="{{ route('keluarga.export', ['id' => $keluarga->id]) }}" class="text-blue-500 hover:text-blue-700" title="Cetak ke Excel">
+
+                                        <!-- Tombol untuk ikon cetak ke Excel berdasarkan ID -->
+                                            <a href="{{ route('keluarga.export', ['id' => $keluarga->id]) }}" class="text-green-500 hover:text-green-700"  title="Cetak ke Excel">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7V4a2 2 0 00-2-2H7a2 2 0 00-2 2v3M5 10h14a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2zm4 5h6" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v16a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm10 2v12m-2-2H8m2-4H8m2-4H8m8 8h-2m2-4h-2m2-4h-2" />
                                                 </svg>
                                             </a>
+
                                               <!-- Tombol Hapus -->
                                             <form action="{{ route('keluarga.destroy', ['id' => $keluarga->id]) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                                 @csrf

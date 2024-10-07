@@ -40,7 +40,7 @@
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
-                        @if(Auth::user()->hasRole('admin'))
+                        @if(Auth::user()->hasAnyRole(['admin', 'PetugasKesehatan']))
                         <x-dropdown-link :href="route('admin.users.index')">
                             {{ __('User Management') }}
                         </x-dropdown-link>
