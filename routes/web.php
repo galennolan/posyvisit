@@ -20,10 +20,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     // Route for deleting a user
     Route::delete('/admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::post('/admin/users/filter', [UserController::class, 'filter'])->name('admin.users.filter');
 });
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login'); // Redirect ke halaman login
 });
 
 Route::get('/dashboard', function () {
@@ -42,15 +43,24 @@ Route::get('/keluarga/export/{id}', function ($id) {
     return Excel::download(new KeluargaExport($id), 'keluarga_'.$id.'.xlsx');
 })->name('keluarga.export');
 
-Route::get('/keluarga', [KeluargaController::class, 'index'])->name('keluarga');
-Route::get('/keluarga/create', [KeluargaController::class, 'create'])->name('keluarga.create');
-Route::post('/keluarga', [KeluargaController::class, 'store'])->name('keluarga.store');
-Route::get('/keluarga/{id}', [KeluargaController::class, 'show']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/keluarga', [KeluargaController::class, 'index'])->name('keluarga');
+    Route::get('/keluarga/create', [KeluargaController::class, 'create'])->name('keluarga.create');
+    Route::post('/keluarga', [KeluargaController::class, 'store'])->name('keluarga.store');
+    Route::get('/keluarga/{id}', [KeluargaController::class, 'show'])->name('keluarga.show');
 
-// Tambahan rute untuk edit, update, dan destroy
-Route::get('/keluarga/{id}/edit', [KeluargaController::class, 'edit'])->name('keluarga.edit');
-Route::put('/keluarga/{id}', [KeluargaController::class, 'update'])->name('keluarga.update');
-Route::delete('/keluarga/{id}', [KeluargaController::class, 'destroy'])->name('keluarga.destroy');
+    // Tambahan rute untuk edit, update, dan destroy
+    Route::get('/keluarga/{id}/edit', [KeluargaController::class, 'edit'])->name('keluarga.edit');
+    Route::put('/keluarga/{id}', [KeluargaController::class, 'update'])->name('keluarga.update');
+    Route::delete('/keluarga/{id}', [KeluargaController::class, 'destroy'])->name('keluarga.destroy');
+
+    Route::post('/keluarga/filter', [KeluargaController::class, 'indexWithFilter'])->name('keluarga.filter');
+});
+
+
+
+
+
 
 
 require __DIR__.'/auth.php';

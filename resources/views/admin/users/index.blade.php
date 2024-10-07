@@ -1,17 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Daftar Kader Posyandu') }}
-            </h2>
-            <nav class="breadcrumb">
-                <ol class="list-reset flex text-sm"> <!-- Perkecil font dengan text-sm -->
-                    <li><a href="/dashboard" class="text-blue-600 hover:text-blue-800">Home </a></li>
-                    <li><span class="mx-2">/ </span></li>
-                    <!-- Tambahkan warna biru pada item yang dikunjungi -->
-                    <li class="text-blue-600 font-semibold"> Daftar Kader Posyandu</li> 
-                </ol>
-            </nav>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Daftar Kader Posyandu') }}
+        </h2>
+        <nav class="breadcrumb">
+            <ol class="list-reset flex text-sm">
+                <li><a href="/dashboard" class="text-blue-600 hover:text-blue-800">Home </a></li>
+                <li><span class="mx-2">/ </span></li>
+                <li class="text-blue-600 font-semibold"> Daftar Kader Posyandu</li>
+            </ol>
+        </nav>
     </x-slot>
 
     <div class="py-12">
@@ -24,7 +22,25 @@
                         </div>
                     @endif
 
-                    <!-- Wrapper untuk membuat tabel bisa discroll secara horizontal -->
+                    <!-- Dropdown untuk memilih kecamatan -->
+                    <div class="mb-4">
+                        <form action="{{ route('admin.users.filter') }}" method="POST">
+                        @csrf <!-- Include CSRF token -->
+                            <label for="kecamatan" class="mr-2">Pilih Kader Posyandu dari Kecamatan:</label>
+                            <select name="kecamatan" id="kecamatan" class="border rounded p-2 w-40">
+                                <option value="">--- Pilih Kec ---</option>
+                                <!-- Tambahkan opsi kecamatan sesuai dengan yang ada di database -->
+                                <option value="Pasar Kliwon" {{ (isset($kecamatan) && $kecamatan == 'Pasar Kliwon') ? 'selected' : '' }}>Pasar Kliwon</option>
+                                <option value="Banjarsari" {{ (isset($kecamatan) && $kecamatan == 'Banjarsari') ? 'selected' : '' }}>Banjarsari</option>
+                                <option value="Laweyan" {{ (isset($kecamatan) && $kecamatan == 'Laweyan') ? 'selected' : '' }}>Laweyan</option>
+                                <option value="Serengan" {{ (isset($kecamatan) && $kecamatan == 'Serengan') ? 'selected' : '' }}>Serengan</option>
+                               
+                                <option value="Jebres" {{ (isset($kecamatan) && $kecamatan == 'Jebres') ? 'selected' : '' }}>Jebres</option>
+                            </select>
+                            <button type="submit" class="bg-blue-500 text-white rounded p-2 ml-2">Tampilkan</button>
+                        </form>
+                    </div>
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full table-auto divide-y divide-gray-200 dark:divide-gray-700">
                             <thead>

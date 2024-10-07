@@ -111,7 +111,7 @@
                         @enderror
                     </div>
                 </div>
-
+                <input type="hidden" name="id_user" value="{{ auth()->user()->id }}"> <!-- Menyimpan ID user yang login -->
                 <!-- Section for Anggota Keluarga -->
                 <div class="bg-gray-100 rounded-lg p-4 mt-6">
                     <h3 class="text-md font-semibold text-gray-700">Data Anggota Keluarga</h3>
@@ -168,128 +168,129 @@ $(document).ready(function() {
 </script>
 
     <!-- Script untuk menambahkan anggota keluarga -->
-    <script>
-$(document).ready(function() {
-    let anggotaCount = 0;
+        <script>
+    $(document).ready(function() {
+        let anggotaCount = 0;
 
-    // Function to add new anggota keluarga form
-    $('#addAnggotaButton').click(function() {
-        anggotaCount++;
-        let anggotaForm = `
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white rounded-md shadow-md border border-gray-200" id="anggota_${anggotaCount}">
-                <div class="col-span-2 flex justify-between items-center">
-                    <h5 class="font-semibold">Anggota Keluarga ${anggotaCount}</h5>
-                    <button type="button" class="text-red-600 hover:text-red-800" onclick="removeAnggota(${anggotaCount})">Hapus Anggota</button>
-                </div>
+        // Function to add new anggota keluarga form
+        $('#addAnggotaButton').click(function() {
+            anggotaCount++;
+            let anggotaForm = `
+                <div class="grid  gap-4 p-4 bg-white rounded-md shadow-md border border-gray-200" id="anggota_${anggotaCount}">
+                    <div class="col-span-2 flex justify-between items-center">
+                        <h5 class="font-semibold">Anggota Keluarga ${anggotaCount}</h5>
+                        <button type="button" class="text-red-600 hover:text-red-800" onclick="removeAnggota(${anggotaCount})">Hapus Anggota</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <!-- Nama Lengkap -->
+                    <div class="col-span-1">
+                        <label for="nama_lengkap_${anggotaCount}" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                        <input type="text" id="nama_lengkap_${anggotaCount}" name="anggota[${anggotaCount}][nama_lengkap]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
 
-                <!-- Nama Lengkap -->
-                <div class="col-span-1">
-                    <label for="nama_lengkap_${anggotaCount}" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                    <input type="text" id="nama_lengkap_${anggotaCount}" name="anggota[${anggotaCount}][nama_lengkap]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                </div>
+                    <!-- NIK -->
+                    <div class="col-span-1">
+                        <label for="nik_${anggotaCount}" class="block text-sm font-medium text-gray-700">NIK</label>
+                        <input type="text" id="nik_${anggotaCount}" name="anggota[${anggotaCount}][nik]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
 
-                <!-- NIK -->
-                <div class="col-span-1">
-                    <label for="nik_${anggotaCount}" class="block text-sm font-medium text-gray-700">NIK</label>
-                    <input type="text" id="nik_${anggotaCount}" name="anggota[${anggotaCount}][nik]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                </div>
+                    <!-- Tanggal Lahir -->
+                    <div class="col-span-1">
+                        <label for="tanggal_lahir_${anggotaCount}" class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
+                        <input type="date" id="tanggal_lahir_${anggotaCount}" name="anggota[${anggotaCount}][tanggal_lahir]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
 
-                <!-- Tanggal Lahir -->
-                <div class="col-span-1">
-                    <label for="tanggal_lahir_${anggotaCount}" class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
-                    <input type="date" id="tanggal_lahir_${anggotaCount}" name="anggota[${anggotaCount}][tanggal_lahir]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                </div>
+                    <!-- Jenis Kelamin -->
+                    <div class="col-span-1">
+                        <label for="jenis_kelamin_${anggotaCount}" class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                        <select id="jenis_kelamin_${anggotaCount}" name="anggota[${anggotaCount}][jenis_kelamin]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="Laki-Laki">Laki-Laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
 
-                <!-- Jenis Kelamin -->
-                <div class="col-span-1">
-                    <label for="jenis_kelamin_${anggotaCount}" class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
-                    <select id="jenis_kelamin_${anggotaCount}" name="anggota[${anggotaCount}][jenis_kelamin]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="Laki-Laki">Laki-Laki</option>
-                        <option value="Perempuan">Perempuan</option>
-                    </select>
-                </div>
+                    <!-- Hubungan KK -->
+                    <div>
+                        <label for="hubungan_kk_${anggotaCount}" class="block text-sm font-medium text-gray-700">Hubungan KK</label>
+                        <select id="hubungan_kk_${anggotaCount}" name="anggota[${anggotaCount}][hubungan_kk]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="1">Kepala Keluarga</option>
+                            <option value="2">Suami</option>
+                            <option value="3">Istri</option>
+                            <option value="4">Anak</option>
+                            <option value="5">Menantu</option>
+                            <option value="6">Cucu</option>
+                            <option value="7">Orang Tua</option>
+                            <option value="8">Mertua</option>
+                            <option value="9">Anggota Lain</option>
+                        </select>
+                    </div>
 
-                <!-- Hubungan KK -->
-                <div class="col-span-1">
-                    <label for="hubungan_kk_${anggotaCount}" class="block text-sm font-medium text-gray-700">Hubungan KK</label>
-                    <select id="hubungan_kk_${anggotaCount}" name="anggota[${anggotaCount}][hubungan_kk]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="1">Kepala Keluarga</option>
-                        <option value="2">Suami</option>
-                        <option value="3">Istri</option>
-                        <option value="4">Anak</option>
-                        <option value="5">Menantu</option>
-                        <option value="6">Cucu</option>
-                        <option value="7">Orang Tua</option>
-                        <option value="8">Mertua</option>
-                        <option value="9">Anggota Lain</option>
-                    </select>
-                </div>
+                    <!-- Status Perkawinan -->
+                    <div>
+                        <label for="status_perkawinan_${anggotaCount}" class="block text-sm font-medium text-gray-700">Status Perkawinan</label>
+                        <select id="status_perkawinan_${anggotaCount}" name="anggota[${anggotaCount}][status_perkawinan]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="1">Belum Menikah</option>
+                            <option value="2">Menikah</option>
+                            <option value="3">Cerai Hidup</option>
+                            <option value="4">Cerai Mati</option>
+                        </select>
+                    </div>
 
-                <!-- Status Perkawinan -->
-                <div class="col-span-1">
-                    <label for="status_perkawinan_${anggotaCount}" class="block text-sm font-medium text-gray-700">Status Perkawinan</label>
-                    <select id="status_perkawinan_${anggotaCount}" name="anggota[${anggotaCount}][status_perkawinan]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="1">Belum Menikah</option>
-                        <option value="2">Menikah</option>
-                        <option value="3">Cerai Hidup</option>
-                        <option value="4">Cerai Mati</option>
-                    </select>
-                </div>
+                    <!-- Pendidikan Terakhir -->
+                    <div>
+                        <label for="pendidikan_terakhir_${anggotaCount}" class="block text-sm font-medium text-gray-700">Pendidikan Terakhir</label>
+                        <select id="pendidikan_terakhir_${anggotaCount}" name="anggota[${anggotaCount}][pendidikan_terakhir]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="1">Tidak Sekolah</option>
+                            <option value="2">SD</option>
+                            <option value="3">SMP</option>
+                            <option value="4">SMA</option>
+                            <option value="5">Diploma</option>
+                            <option value="6">Sarjana</option>
+                        </select>
+                    </div>
 
-                <!-- Pendidikan Terakhir -->
-                <div class="col-span-1">
-                    <label for="pendidikan_terakhir_${anggotaCount}" class="block text-sm font-medium text-gray-700">Pendidikan Terakhir</label>
-                    <select id="pendidikan_terakhir_${anggotaCount}" name="anggota[${anggotaCount}][pendidikan_terakhir]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="1">Tidak Sekolah</option>
-                        <option value="2">SD</option>
-                        <option value="3">SMP</option>
-                        <option value="4">SMA</option>
-                        <option value="5">Diploma</option>
-                        <option value="6">Sarjana</option>
-                    </select>
-                </div>
+                    <!-- Pekerjaan -->
+                    <div>
+                        <label for="pekerjaan_${anggotaCount}" class="block text-sm font-medium text-gray-700">Pekerjaan</label>
+                        <select id="pekerjaan_${anggotaCount}" name="anggota[${anggotaCount}][pekerjaan]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="1">Tidak Bekerja</option>
+                            <option value="2">Petani</option>
+                            <option value="3">PNS</option>
+                            <option value="4">Buruh</option>
+                            <option value="5">Wiraswasta</option>
+                            <option value="6">Pelajar</option>
+                            <option value="7">Lainnya</option>
+                        </select>
+                    </div>
 
-                <!-- Pekerjaan -->
-                <div class="col-span-1">
-                    <label for="pekerjaan_${anggotaCount}" class="block text-sm font-medium text-gray-700">Pekerjaan</label>
-                    <select id="pekerjaan_${anggotaCount}" name="anggota[${anggotaCount}][pekerjaan]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="1">Tidak Bekerja</option>
-                        <option value="2">Petani</option>
-                        <option value="3">PNS</option>
-                        <option value="4">Buruh</option>
-                        <option value="5">Wiraswasta</option>
-                        <option value="6">Pelajar</option>
-                        <option value="7">Lainnya</option>
-                    </select>
-                </div>
+                    <!-- Kelompok Sasaran -->
+                    <div>
+                        <label for="kelompok_sasaran_${anggotaCount}" class="block text-sm font-medium text-gray-700">Kelompok Sasaran</label>
+                        <select id="kelompok_sasaran_${anggotaCount}" name="anggota[${anggotaCount}][kelompok_sasaran]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="Ibu Hamil">Ibu Hamil</option>
+                            <option value="Ibu Bersalin & Nifas">Ibu Bersalin & Nifas</option>
+                            <option value="Bayi - Balita (0-6 tahun)">Bayi - Balita (0-6 tahun)</option>
+                            <option value="Usia Sekolah & Remaja (≥6 - <18 tahun)">Usia Sekolah & Remaja (≥6 - <18 tahun)</option>
+                            <option value="Usia Dewasa (≥18-59 tahun)">Usia Dewasa (≥18-59 tahun)</option>
+                            <option value="Lansia (≥60 tahun)">Lansia (≥60 tahun)</option>
+                        </select>
+                    </div>
+                    </div>
+                </div>`;
+            
+            $('#anggotaKeluargaContainer').append(anggotaForm);
 
-                <!-- Kelompok Sasaran -->
-                <div class="col-span-1">
-                    <label for="kelompok_sasaran_${anggotaCount}" class="block text-sm font-medium text-gray-700">Kelompok Sasaran</label>
-                    <select id="kelompok_sasaran_${anggotaCount}" name="anggota[${anggotaCount}][kelompok_sasaran]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                        <option value="Ibu Hamil">Ibu Hamil</option>
-                        <option value="Ibu Bersalin & Nifas">Ibu Bersalin & Nifas</option>
-                        <option value="Bayi - Balita (0-6 tahun)">Bayi - Balita (0-6 tahun)</option>
-                        <option value="Usia Sekolah & Remaja (≥6 - <18 tahun)">Usia Sekolah & Remaja (≥6 - <18 tahun)</option>
-                        <option value="Usia Dewasa (≥18-59 tahun)">Usia Dewasa (≥18-59 tahun)</option>
-                        <option value="Lansia (≥60 tahun)">Lansia (≥60 tahun)</option>
-                    </select>
-                </div>
-            </div>`;
-        
-        $('#anggotaKeluargaContainer').append(anggotaForm);
-
-        // Validasi sederhana NIK: Hanya izinkan input dengan 16 digit
-        document.querySelectorAll(`[name^="anggota[${anggotaCount}]"][name$="[nik]"]`).forEach(function(nikField) {
-            nikField.addEventListener('input', function() {
-                if (this.value.length !== 16) {
-                    this.setCustomValidity('NIK harus 16 digit');
-                } else {
-                    this.setCustomValidity('');
-                }
+            // Validasi sederhana NIK: Hanya izinkan input dengan 16 digit
+            document.querySelectorAll(`[name^="anggota[${anggotaCount}]"][name$="[nik]"]`).forEach(function(nikField) {
+                nikField.addEventListener('input', function() {
+                    if (this.value.length !== 16) {
+                        this.setCustomValidity('NIK harus 16 digit');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                });
             });
         });
-    });
 
     // Function to remove anggota keluarga form
     window.removeAnggota = function(anggotaId) {
@@ -340,4 +341,27 @@ $(document).ready(function() {
         });
     </script>
 
+<!-- Tambahkan Script SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Cek jika ada pesan sukses di session
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+            });
+        @endif
+
+        // Cek jika ada pesan error di session
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+            });
+        @endif
+    });
+</script>
 </x-app-layout>

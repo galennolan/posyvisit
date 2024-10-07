@@ -18,7 +18,37 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-lg rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-700 mb-4">Daftar Keluarga</h3>
-            
+                <div class="flex space-x-4 mb-4">
+
+                <!-- Form Filter Tanggal -->
+                <form method="POST" action="{{ route('keluarga.filter') }}" class="mb-4 flex space-x-4">
+                @csrf <!-- Token CSRF -->
+                    <div class="flex space-x-4 mb-4">
+                        <!-- Tanggal Mulai -->
+                        <div>
+                            <label for="tanggalMulai" class="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
+                            <input type="date" id="tanggalMulai" name="tanggal_mulai" 
+                                value="{{ old('tanggal_mulai', isset($tanggalMulai) ? $tanggalMulai : '') }}" 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <!-- Tanggal Akhir -->
+                        <div>
+                            <label for="tanggalAkhir" class="block text-sm font-medium text-gray-700">Tanggal Akhir</label>
+                            <input type="date" id="tanggalAkhir" name="tanggal_akhir" 
+                                value="{{ old('tanggal_akhir', isset($tanggalAkhir) ? $tanggalAkhir : '') }}" 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <!-- Tombol Filter -->
+                        <div class="flex items-end">
+                            <button type="submit" id="filterButton" class="ml-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
+                                Filter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
                 <div class="table-responsive">
                     <table id="keluargaTable" class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
@@ -35,7 +65,10 @@
                             @foreach($keluargas as $index => $keluarga)
                                 <tr class="hover:bg-gray-50 transition duration-200">
                                     <td class="px-4 py-2 text-sm text-gray-500">{{ $index + 1 }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-700">{{ $keluarga->anggotaKeluarga->first()->nama_lengkap ?? '-' }}</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700">@php
+                                        $anggota = $keluarga->anggotaKeluarga->firstWhere('hubungan_kk', 1);
+                                    @endphp
+                                    {{ $anggota ? $anggota->nama_lengkap : '-' }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-700">{{ \Illuminate\Support\Str::limit($keluarga->alamat, 35, '...') }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-700">{{ $keluarga->no_handphone }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-700">
@@ -53,6 +86,14 @@
                                                 </svg>
                                             </button>
 
+                                            <!-- Tombol untuk mengedit keluarga -->
+                                            <a href="{{ route('keluarga.edit', $keluarga->id) }}" class="text-yellow-500 hover:text-yellow-700" title="Edit Keluarga">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h4l3 3-7 7-4-4 3-3V7z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 7l-4 4m-4 4l4-4m0 0l-4 4" />
+                                                </svg>
+                                            </a>
+
                                            <!-- Tombol untuk ikon cetak ke Excel berdasarkan ID -->
                                             <a href="{{ route('keluarga.export', ['id' => $keluarga->id]) }}" class="text-blue-500 hover:text-blue-700" title="Cetak ke Excel">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
@@ -69,6 +110,7 @@
                                                     </svg>
                                                 </button>
                                             </form>
+                                          
                                         </td>
 
                                 </tr>
@@ -136,5 +178,36 @@
         }
     </script>
 
+<script>
+       $(document).ready(function() {
+        $('#filterForm').submit(function(e) {
+            e.preventDefault(); // Mencegah form dikirim secara default
+
+            let tanggalMulai = $('#tanggalMulai').val();
+            let tanggalAkhir = $('#tanggalAkhir').val();
+
+            if (tanggalMulai && tanggalAkhir) {
+                $.ajax({
+                    url: '{{ route('keluarga.filter') }}',  // Pastikan URL ini sesuai dengan route
+                    type: 'GET',
+                    data: {
+                        tanggal_mulai: tanggalMulai,
+                        tanggal_akhir: tanggalAkhir
+                    },
+                    success: function(data) {
+                        $('#keluargaTable tbody').html(data); // Update tabel dengan data baru
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error:', textStatus, errorThrown);
+                        alert('Gagal mengambil data berdasarkan filter tanggal');
+                    }
+                });
+            } else {
+                alert('Silakan pilih Tanggal Mulai dan Tanggal Akhir');
+            }
+        });
+    });
+
+    </script>
 
 </x-app-layout>

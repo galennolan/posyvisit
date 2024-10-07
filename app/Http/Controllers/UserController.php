@@ -105,4 +105,17 @@ class UserController extends Controller
         // Redirect ke halaman daftar user dengan pesan sukses
         return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus!');
     }
+    public function filter(Request $request)
+    {
+        $kecamatan = $request->input('kecamatan');
+
+        // Ambil pengguna berdasarkan kecamatan yang dipilih
+        $users = User::when($kecamatan, function ($query, $kecamatan) {
+            return $query->where('kecamatan', $kecamatan);
+        })->get();
+
+  
+        return view('admin.users.index', compact('users','kecamatan'));
+    }
+
 }

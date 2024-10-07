@@ -3,6 +3,8 @@
     <p><strong>Alamat:</strong> {{ $keluarga->alamat }}</p>
     <p><strong>No Handphone:</strong> {{ $keluarga->no_handphone }}</p>
     <p><strong>Puskesmas:</strong> {{ $keluarga->puskesmas }}</p>
+    <p><strong>Kecamatan:</strong> {{ $keluarga->kecamatan }}</p>
+    <p><strong>Kelurahan:</strong> {{ $keluarga->kelurahan }}</p>
     <p><strong>Pustu/Posyandu Prima:</strong> {{ $keluarga->pustu }}</p>
 
     <h3 class="text-lg font-semibold mt-4">Anggota Keluarga</h3>
