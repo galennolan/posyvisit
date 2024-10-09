@@ -14,11 +14,32 @@ class UserController extends Controller
      * Menampilkan halaman untuk membuat user baru oleh admin.
      */
     public function create()
-    {
-        // Mengambil daftar role yang bisa dipilih oleh admin
+{
+    // Mendapatkan user yang sedang login
+    $user = auth()->user();
+    
+    // Daftar kecamatan default
+    $kecamatanList = ['Banjarsari', 'Jebres', 'Laweyan', 'Pasar Kliwon', 'Serengan'];
+    
+    // Jika user memiliki role 'admin', tampilkan semua role
+    if ($user->hasRole('admin')) {
         $roles = Role::all();
-        return view('admin.users.create', compact('roles'));
+    } 
+    // Jika user memiliki role 'PetugasKesehatan', tampilkan role selain 'admin' dan 'PetugasKesehatan'
+    elseif ($user->hasRole('PetugasKesehatan')) {
+        $roles = Role::whereNotIn('name', ['admin', 'PetugasKesehatan'])->get();
+        
+        // Set kecamatan user yang sedang login
+        $kecamatanList = [$user->kecamatan]; // Mengambil kecamatan user tersebut
+    } 
+    // Jika ada role lain, tambahkan kondisi yang sesuai
+    else {
+        $roles = Role::all();
     }
+
+    // Kirimkan variabel roles dan kecamatanList ke view
+    return view('admin.users.create', compact('roles', 'kecamatanList'));
+}
 
     /**
      * Menyimpan user baru yang dibuat oleh admin.

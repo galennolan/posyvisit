@@ -18,6 +18,8 @@ class Keluarga extends Model
         'puskesmas',
         'pustu',
         'provinsi',
+        'jenis_jamban', 
+        'jenis_sumber_air',
         'id_user', // Pastikan ini ada
     ];
     public function anggotaKeluarga()

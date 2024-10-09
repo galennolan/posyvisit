@@ -1,4 +1,4 @@
-<div class="text-left"> 
+<div class="text-left text-sm">
     <p><strong>Tanggal Pengumpulan Data:</strong> {{ \Carbon\Carbon::parse($keluarga->tanggal_pengumpulan_data)->format('d/m/Y') }}</p>
     <p><strong>Alamat:</strong> {{ $keluarga->alamat }}</p>
     <p><strong>No Handphone:</strong> {{ $keluarga->no_handphone }}</p>
@@ -6,6 +6,15 @@
     <p><strong>Kecamatan:</strong> {{ $keluarga->kecamatan }}</p>
     <p><strong>Kelurahan:</strong> {{ $keluarga->kelurahan }}</p>
     <p><strong>Pustu/Posyandu Prima:</strong> {{ $keluarga->pustu }}</p>
+    <p><strong>JKN:</strong> {{ $keluarga->jkn }}</p>
+    <p><strong>Sarana Air Bersih:</strong> {{ $keluarga->sarana_air_bersih }}</p>
+    <p><strong>Jenis Sumber Air:</strong> {{ $keluarga->jenis_sumber_air ?? 'Tidak Tersedia' }}</p>
+    <p><strong>Jamban Keluarga:</strong> {{ $keluarga->jamban_keluarga }}</p>
+    <p><strong>Jenis Jamban:</strong> {{ $keluarga->jenis_jamban ?? 'Tidak Tersedia' }}</p>
+    <p><strong>Ventilasi:</strong> {{ $keluarga->ventilasi }}</p>
+    <p><strong>Gangguan Jiwa:</strong> {{ $keluarga->gangguan_jiwa }}</p>
+    <p><strong>Terdiagnosis Penyakit (TBC, Hipertensi, Diabetes Melitus):</strong> {{ $keluarga->terdiagnosis_penyakit }}</p>
+
 
     <h3 class="text-lg font-semibold mt-4">Anggota Keluarga</h3>
     <ul class="list-disc pl-5 text-xs"> <!-- Perkecil ukuran font dengan text-sm -->

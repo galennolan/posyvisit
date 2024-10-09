@@ -126,6 +126,14 @@ class KeluargaController extends Controller
                 'puskesmas' => 'nullable|string|max:100',
                 'pustu' => 'nullable|string|max:100',
                 'provinsi' => 'required|string|max:100',
+                'jkn' => 'required|in:Ya,Tidak',
+                'sarana_air_bersih' => 'required|in:Ya,Tidak',
+                'jenis_sumber_air' => 'nullable|in:Terlindung,Tidak_Terlindung',
+                'jamban_keluarga' => 'required|in:Ya,Tidak',
+                'jenis_jamban' => 'nullable|in:Saniter,Tidak_Saniter',
+                'ventilasi' => 'required|in:Ya,Tidak',
+                'gangguan_jiwa' => 'required|in:Ya,Tidak',
+                'terdiagnosis_penyakit' => 'required|in:Ya,Tidak',
             ]);
 
             $validatedKeluarga['id_user'] = auth()->user()->id; // Menambahkan id_user dari autentikasi
@@ -221,6 +229,14 @@ class KeluargaController extends Controller
             'puskesmas' => 'nullable|string|max:100',
             'pustu' => 'nullable|string|max:100',
             'provinsi' => 'required|string|max:100',
+                'jkn' => 'required|in:Ya,Tidak',
+                'sarana_air_bersih' => 'required|in:Ya,Tidak',
+                'jenis_sumber_air' => 'nullable|in:Terlindung,Tidak_Terlindung',
+                'jamban_keluarga' => 'required|in:Ya,Tidak',
+                'jenis_jamban' => 'nullable|in:Saniter,Tidak_Saniter',
+                'ventilasi' => 'required|in:Ya,Tidak',
+                'gangguan_jiwa' => 'required|in:Ya,Tidak',
+                'terdiagnosis_penyakit' => 'required|in:Ya,Tidak',
         ]);
 
         $validatedKeluarga['id_user'] = auth()->user()->id;

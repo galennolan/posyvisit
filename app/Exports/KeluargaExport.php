@@ -111,6 +111,15 @@ class KeluargaExport implements FromCollection, WithHeadings, WithMapping, WithS
         $rows[] = ['Pustu/Posyandu: ' . $keluarga->pustu]; // Akan di-merge pada D7-D9
 
         $rows[] = ['Provinsi: ' . $keluarga->provinsi];
+        // Tambahkan data tambahan
+        $rows[] = ['Jaminan Kesehatan Nasional (JKN): ' . $keluarga->jkn];
+        $rows[] = ['Sarana Air Bersih: ' . $keluarga->sarana_air_bersih];
+        $rows[] = ['Jenis Sumber Air: ' . ($keluarga->jenis_sumber_air ?? 'Tidak Tersedia')];
+        $rows[] = ['Jamban Keluarga: ' . $keluarga->jamban_keluarga];
+        $rows[] = ['Jenis Jamban: ' . ($keluarga->jenis_jamban ?? 'Tidak Tersedia')];
+        $rows[] = ['Ventilasi: ' . $keluarga->ventilasi];
+        $rows[] = ['Gangguan Jiwa: ' . $keluarga->gangguan_jiwa];
+        $rows[] = ['Terdiagnosis Penyakit (TBC, Hipertensi, Diabetes Melitus): ' . $keluarga->terdiagnosis_penyakit];
 
         // Tambahkan baris kosong sebagai jeda
         $rows[] = [];
@@ -158,8 +167,8 @@ class KeluargaExport implements FromCollection, WithHeadings, WithMapping, WithS
 
 
         // Merge cell dan style untuk 'Anggota Keluarga' dari A10 sampai I10
-        $sheet->mergeCells('A10:I10');
-        $sheet->getStyle('A10:I10')->applyFromArray([
+        $sheet->mergeCells('A18:I18');
+        $sheet->getStyle('A18:I18')->applyFromArray([
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => ['argb' => 'FFCCCCCC'],  // Warna abu-abu

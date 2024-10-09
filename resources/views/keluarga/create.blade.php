@@ -110,6 +110,112 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    <!-- JKN -->
+                    <div class="col-span-1">
+                        <label for="jkn" class="block text-sm font-medium text-gray-700">Apakah memiliki Jaminan Kesehatan Nasional (JKN) / Jaminan
+                        Kesehatan Daerah (Jamkesda) / Asuransi Kesehatan?</label>
+                        <select id="jkn" name="jkn" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('jkn') border-red-500 @enderror">
+                            <option selected disabled>Pilih Status</option>
+                            <option value="Ya" {{ old('jkn') == 'Ya' ? 'selected' : '' }}>Ya</option>
+                            <option value="Tidak" {{ old('jkn') == 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                        </select>
+                        @error('jkn')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Sarana Air Bersih -->
+                    <div class="col-span-1">
+                        <label for="sarana_air_bersih" class="block text-sm font-medium text-gray-700">Apakah tersedia sarana air bersih di lingkungan rumah?</label>
+                        <select id="sarana_air_bersih" name="sarana_air_bersih" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('sarana_air_bersih') border-red-500 @enderror">
+                            <option selected disabled>Pilih Status</option>
+                            <option value="Ya" {{ old('sarana_air_bersih') == 'Ya' ? 'selected' : '' }}>Ya</option>
+                            <option value="Tidak" {{ old('sarana_air_bersih') == 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                        </select>
+                        @error('sarana_air_bersih')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Jenis Sumber Air -->
+                    <div class="col-span-1">
+                        <label for="jenis_sumber_air" class="block text-sm font-medium text-gray-700">Jenis Sumber Air</label>
+                        <select id="jenis_sumber_air" name="jenis_sumber_air" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('jenis_sumber_air') border-red-500 @enderror">
+                            <option selected disabled>Pilih Jenis</option>
+                            <option value="Terlindung" {{ old('jenis_sumber_air') == 'Terlindung' ? 'selected' : '' }}>Terlindung</option>
+                            <option value="Tidak_Terlindung" {{ old('jenis_sumber_air') == 'Tidak_Terlindung' ? 'selected' : '' }}>Tidak Terlindung</option>
+                        </select>
+                        @error('jenis_sumber_air')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Jamban Keluarga -->
+                    <div class="col-span-1">
+                        <label for="jamban_keluarga" class="block text-sm font-medium text-gray-700">Apakah tersedia jamban keluarga ?</label>
+                        <select id="jamban_keluarga" name="jamban_keluarga" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('jamban_keluarga') border-red-500 @enderror">
+                            <option selected disabled>Pilih Status</option>
+                            <option value="Ya" {{ old('jamban_keluarga') == 'Ya' ? 'selected' : '' }}>Ya</option>
+                            <option value="Tidak" {{ old('jamban_keluarga') == 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                        </select>
+                        @error('jamban_keluarga')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Jenis Jamban -->
+                    <div class="col-span-1">
+                        <label for="jenis_jamban" class="block text-sm font-medium text-gray-700">apakan jenis jambannya saniter ?</label>
+                        <select id="jenis_jamban" name="jenis_jamban" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('jenis_jamban') border-red-500 @enderror">
+                            <option selected disabled>Pilih Jenis</option>
+                            <option value="Saniter" {{ old('jenis_jamban') == 'Saniter' ? 'selected' : '' }}>Saniter</option>
+                            <option value="Tidak_Saniter" {{ old('jenis_jamban') == 'Tidak_Saniter' ? 'selected' : '' }}>Tidak Saniter</option>
+                        </select>
+                        @error('jenis_jamban')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Ventilasi -->
+                    <div class="col-span-1">
+                        <label for="ventilasi" class="block text-sm font-medium text-gray-700">Apakah rumah memiliki ventilasi yang cukup?</label>
+                        <select id="ventilasi" name="ventilasi" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('ventilasi') border-red-500 @enderror">
+                            <option selected disabled>Pilih Status</option>
+                            <option value="Ya" {{ old('ventilasi') == 'Ya' ? 'selected' : '' }}>Ya</option>
+                            <option value="Tidak" {{ old('ventilasi') == 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                        </select>
+                        @error('ventilasi')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Gangguan Jiwa -->
+                    <div class="col-span-1">
+                        <label for="gangguan_jiwa" class="block text-sm font-medium text-gray-700">Apakah ada anggota keluarga yang mengalami gangguan jiwa ?</label>
+                        <select id="gangguan_jiwa" name="gangguan_jiwa" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('gangguan_jiwa') border-red-500 @enderror">
+                            <option selected disabled>Pilih Status</option>
+                            <option value="Ya" {{ old('gangguan_jiwa') == 'Ya' ? 'selected' : '' }}>Ya</option>
+                            <option value="Tidak" {{ old('gangguan_jiwa') == 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                        </select>
+                        @error('gangguan_jiwa')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Terdiagnosis Penyakit -->
+                    <div class="col-span-1">
+                        <label for="terdiagnosis_penyakit" class="block text-sm font-medium text-gray-700">Apakah ada anggota keluarga yang terdiagnosis penyakit berikut?
+                        (TBC, Hipertensi, Diabetes Melitus)?</label>
+                        <select id="terdiagnosis_penyakit" name="terdiagnosis_penyakit" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('terdiagnosis_penyakit') border-red-500 @enderror">
+                            <option selected disabled>Pilih Status</option>
+                            <option value="Ya" {{ old('terdiagnosis_penyakit') == 'Ya' ? 'selected' : '' }}>Ya</option>
+                            <option value="Tidak" {{ old('terdiagnosis_penyakit') == 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                        </select>
+                        @error('terdiagnosis_penyakit')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                 </div>
                 <input type="hidden" name="id_user" value="{{ auth()->user()->id }}"> <!-- Menyimpan ID user yang login -->
                 <!-- Section for Anggota Keluarga -->

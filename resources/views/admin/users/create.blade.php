@@ -42,12 +42,9 @@
                         <div class="mb-6">
                             <label for="kecamatan" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Kecamatan</label>
                             <select name="kecamatan" id="kecamatan" class="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring focus:ring-blue-500" required>
-                                <option value="">Pilih Kecamatan</option>
-                                <option value="Banjarsari">Banjarsari</option>
-                                <option value="Jebres">Jebres</option>
-                                <option value="Laweyan">Laweyan</option>
-                                <option value="Pasar Kliwon">Pasar Kliwon</option>
-                                <option value="Serengan">Serengan</option>
+                            @foreach($kecamatanList as $kecamatan)
+                                <option value="{{ $kecamatan }}">{{ $kecamatan }}</option>
+                            @endforeach
                             </select>
                         </div>
 
@@ -161,17 +158,32 @@
             ]
         };
 
-        document.getElementById('kecamatan').addEventListener('change', function() {
-            const kelurahanSelect = document.getElementById('kelurahan');
-            kelurahanSelect.innerHTML = '<option value="">Pilih Kelurahan</option>'; // Clear existing options
-            const selectedKecamatan = this.value;
-            if (kelurahanOptions[selectedKecamatan]) {
-                kelurahanOptions[selectedKecamatan].forEach(function(kelurahan) {
+        const kelurahanSelect = document.getElementById('kelurahan');
+        const kecamatanSelect = document.getElementById('kecamatan');
+
+        // Fungsi untuk update kelurahan
+        function updateKelurahan(kecamatan) {
+            kelurahanSelect.innerHTML = '<option value="">Pilih Kelurahan</option>';
+            if (kelurahanOptions[kecamatan]) {
+                kelurahanOptions[kecamatan].forEach(function(kelurahan) {
                     const option = document.createElement('option');
                     option.value = kelurahan;
                     option.textContent = kelurahan;
                     kelurahanSelect.appendChild(option);
                 });
+            }
+        }
+
+        // Event listener saat kecamatan diubah
+        kecamatanSelect.addEventListener('change', function() {
+            updateKelurahan(this.value);
+        });
+
+        // Update kelurahan saat halaman dimuat, jika kecamatan user sudah dipilih
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectedKecamatan = kecamatanSelect.value;
+            if (selectedKecamatan) {
+                updateKelurahan(selectedKecamatan);
             }
         });
     </script>
