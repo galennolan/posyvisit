@@ -73,9 +73,31 @@
                                     <td class="px-4 py-2 text-sm text-gray-700">{{ $keluarga->no_handphone }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-700">
                                         <ul class="list-disc pl-5">
-                                            @foreach($keluarga->anggotaKeluarga as $anggota)
-                                                <li>{{ $anggota->nama_lengkap }} ({{ $anggota->nik }})</li>
-                                            @endforeach
+                                        @foreach($keluarga->anggotaKeluarga as $anggota)
+                                        @if($anggota->kelompok_sasaran === 'Ibu Hamil')
+                                            @php
+                                                // Cek apakah anggota ini memiliki data kunjungan
+                                                $kunjungan = $anggota->kunjunganIbuHamil ?? null;
+                                            @endphp
+                                            {{ $anggota->nama_lengkap }} ({{ $anggota->nik }}, 
+                                            @if($kunjungan)
+                                                <!-- Jika data kunjungan ada, arahkan ke halaman edit -->
+                                                <a href="{{ route('kunjungan.edit', ['kunjungan' => $kunjungan->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @else
+                                                <!-- Jika data kunjungan tidak ada, arahkan ke halaman create -->
+                                                <a href="{{ route('kunjungan.create', ['anggota_keluarga_id' => $anggota->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @endif
+                                        @else
+                                            <!-- Jika bukan kelompok sasaran Ibu Hamil, tampilkan tanpa tautan -->
+                                            {{ $anggota->nama_lengkap }} ({{ $anggota->nik }}, {{ $anggota->kelompok_sasaran }})
+                                        @endif
+                                    @endforeach
+
+
                                         </ul>
                                     </td>
                                     <td class="px-4 py-2 flex justify-center items-center space-x-2">

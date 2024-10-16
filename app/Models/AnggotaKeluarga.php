@@ -29,4 +29,10 @@ class AnggotaKeluarga extends Model
     {
         return $this->belongsTo(Keluarga::class, 'keluarga_id');
     }
+    // Di dalam model AnggotaKeluarga
+    public function kunjunganIbuHamil()
+    {
+        return $this->hasOne(KunjunganIbuHamil::class, 'anggota_keluarga_id');
+    }
+
 }

@@ -136,13 +136,7 @@ class KeluargaController extends Controller
                 'terdiagnosis_penyakit' => 'required|in:Ya,Tidak',
             ]);
 
-            $validatedKeluarga['id_user'] = auth()->user()->id; // Menambahkan id_user dari autentikasi
-
             Log::info('Validasi keluarga berhasil.', ['validatedKeluarga' => $validatedKeluarga]);
-
-            // Simpan data keluarga
-            $keluarga = Keluarga::create($validatedKeluarga);
-            Log::info('Data keluarga berhasil disimpan.', ['keluarga' => $keluarga]);
 
             // Validasi semua data anggota keluarga sekaligus
             if ($request->has('anggota') && !empty($request->input('anggota'))) {
@@ -159,18 +153,27 @@ class KeluargaController extends Controller
                 ], [
                     'anggota.*.nik.unique' => 'NIK sudah terdaftar. Silakan masukkan NIK yang lain.',
                 ]);
-                Log::info('Validasi anggota keluarga berhasil.', ['validatedAnggota' => $validatedAnggota]);
-            }
 
-            // Loop untuk menyimpan setiap anggota keluarga
-            if (isset($validatedAnggota)) {
+                Log::info('Validasi anggota keluarga berhasil.', ['validatedAnggota' => $validatedAnggota]);
+
+                // Simpan data keluarga jika ada anggota
+                $validatedKeluarga['id_user'] = auth()->user()->id; // Menambahkan id_user dari autentikasi
+
+                $keluarga = Keluarga::create($validatedKeluarga);
+                Log::info('Data keluarga berhasil disimpan.', ['keluarga' => $keluarga]);
+
+                // Loop untuk menyimpan setiap anggota keluarga
                 foreach ($validatedAnggota['anggota'] as $anggotaData) {
                     $keluarga->anggotaKeluarga()->create($anggotaData);
                 }
+
                 Log::info('Data anggota keluarga berhasil disimpan.');
+                return redirect()->route('keluarga')->with('success', 'Data keluarga dan anggota berhasil disimpan.');
+            } else {
+                Log::info('Tidak ada anggota keluarga yang valid. Penyimpanan data keluarga dibatalkan.');
+                return redirect()->back()->with('error', 'Data keluarga tidak disimpan karena tidak ada anggota keluarga yang valid.')->withInput();
             }
 
-            return redirect()->route('keluarga')->with('success', 'Data keluarga dan anggota berhasil disimpan.');
         } catch (ValidationException $e) {
             Log::error('Validasi gagal', ['errors' => $e->errors()]);
 
@@ -191,6 +194,7 @@ class KeluargaController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data keluarga.')->withInput();
         }
     }
+
 
     
     // Fungsi Hapus untuk menghapus data keluarga

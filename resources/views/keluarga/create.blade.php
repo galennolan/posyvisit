@@ -276,13 +276,12 @@ $(document).ready(function() {
     <!-- Script untuk menambahkan anggota keluarga -->
         <script>
     $(document).ready(function() {
-        let anggotaCount = 0;
+        let anggotaCount = {{ old('anggota') ? count(old('anggota')) : 0 }};
 
-        // Function to add new anggota keluarga form
-        $('#addAnggotaButton').click(function() {
+    function addAnggotaForm(index, data = {}) {
             anggotaCount++;
             let anggotaForm = `
-                <div class="grid  gap-4 p-4 bg-white rounded-md shadow-md border border-gray-200" id="anggota_${anggotaCount}">
+                <div class="grid  gap-4 p-5 bg-white rounded-md shadow-md border border-gray-200" id="anggota_${anggotaCount}">
                     <div class="col-span-2 flex justify-between items-center">
                         <h5 class="font-semibold">Anggota Keluarga ${anggotaCount}</h5>
                         <button type="button" class="text-red-600 hover:text-red-800" onclick="removeAnggota(${anggotaCount})">Hapus Anggota</button>
@@ -384,25 +383,41 @@ $(document).ready(function() {
                     </div>
                 </div>`;
             
-            $('#anggotaKeluargaContainer').append(anggotaForm);
+                $('#anggotaKeluargaContainer').append(anggotaForm);
 
-            // Validasi sederhana NIK: Hanya izinkan input dengan 16 digit
-            document.querySelectorAll(`[name^="anggota[${anggotaCount}]"][name$="[nik]"]`).forEach(function(nikField) {
-                nikField.addEventListener('input', function() {
-                    if (this.value.length !== 16) {
+                // Validasi NIK: Hanya izinkan input dengan 16 digit
+                $(`[name="anggota[${index}][nik]"]`).on('input', function() {
+                    const nikValue = $(this).val();
+                    if (nikValue.length !== 16) {
                         this.setCustomValidity('NIK harus 16 digit');
                     } else {
                         this.setCustomValidity('');
                     }
+                    this.reportValidity();
                 });
-            });
-        });
+                }
 
-    // Function to remove anggota keluarga form
-    window.removeAnggota = function(anggotaId) {
-        $('#anggota_' + anggotaId).remove();
-    };
-});
+                // Load old data jika ada validasi yang gagal
+                @if(old('anggota'))
+                @foreach(old('anggota') as $index => $anggota)
+                    addAnggotaForm({{ $index }}, @json($anggota));
+                @endforeach
+                @else
+                // Jika tidak ada data lama, tambahkan minimal satu form kosong
+                addAnggotaForm(0);
+                @endif
+
+                // Tambahkan anggota baru saat tombol "Tambah Anggota" diklik
+                $('#addAnggotaButton').click(function() {
+                addAnggotaForm(anggotaCount);
+                anggotaCount++;
+                });
+
+                // Function untuk menghapus form anggota keluarga
+                window.removeAnggota = function(index) {
+                $('#anggota_' + index).remove();
+                };
+                });
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

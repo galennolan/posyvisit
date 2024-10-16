@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KunjunganIbuHamilController;
 use App\Exports\KeluargaExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -47,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/keluarga/create', [KeluargaController::class, 'create'])->name('keluarga.create');
     Route::post('/keluarga', [KeluargaController::class, 'store'])->name('keluarga.store');
     Route::get('/keluarga/{id}', [KeluargaController::class, 'show'])->name('keluarga.show');
+    Route::get('/check-nik', [KeluargaController::class, 'checkNik']);
 
     // Tambahan rute untuk edit, update, dan destroy
     Route::get('/keluarga/{id}/edit', [KeluargaController::class, 'edit'])->name('keluarga.edit');
@@ -57,8 +59,10 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+Route::resource('kunjungan', KunjunganIbuHamilController::class);
 
 
+Route::resource('kunjungan_ibu_bersalin_nifas', KunjunganIbuBersalinNifasController::class);
 
 
 
