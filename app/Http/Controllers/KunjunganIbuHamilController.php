@@ -19,6 +19,7 @@ class KunjunganIbuHamilController extends Controller
         $anggotaKeluarga = AnggotaKeluarga::find($request->anggota_keluarga_id);
         return view('kunjungan.create', compact('anggotaKeluarga'));
     }
+    
 
     public function store(Request $request)
     {
@@ -143,13 +144,18 @@ class KunjunganIbuHamilController extends Controller
         return redirect()->route('kunjungan.index')->with('success', 'Data kunjungan ibu hamil berhasil disimpan.');
     }
     
-
     public function show($id)
     {
-        $kunjungan = KunjunganIbuHamil::findOrFail($id);
+        $kunjungan = KunjunganIbuHamil::with('anggotaKeluarga')->findOrFail($id);
+        
+        if (request()->ajax()) {
+            return view('kunjungan.partials.detail', compact('kunjungan'));
+        }
+    
         return view('kunjungan.show', compact('kunjungan'));
     }
-
+    
+    
     public function edit($id)
     {
         $kunjungan = KunjunganIbuHamil::findOrFail($id);

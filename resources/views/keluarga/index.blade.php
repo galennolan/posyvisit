@@ -76,26 +76,99 @@
                                         @foreach($keluarga->anggotaKeluarga as $anggota)
                                         @if($anggota->kelompok_sasaran === 'Ibu Hamil')
                                             @php
-                                                // Cek apakah anggota ini memiliki data kunjungan
-                                                $kunjungan = $anggota->kunjunganIbuHamil ?? null;
+                                                // Cek apakah anggota ini memiliki data kunjungan Ibu Hamil
+                                                $kunjunganHamil = $anggota->kunjunganIbuHamil ?? null;
                                             @endphp
-                                            {{ $anggota->nama_lengkap }} ({{ $anggota->nik }}, 
-                                            @if($kunjungan)
-                                                <!-- Jika data kunjungan ada, arahkan ke halaman edit -->
-                                                <a href="{{ route('kunjungan.edit', ['kunjungan' => $kunjungan->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                            {{ $anggota->nama_lengkap }} ({{ $anggota->nik }},
+                                            @if($kunjunganHamil)
+                                                <!-- Jika data kunjungan Ibu Hamil ada, arahkan ke halaman edit -->
+                                                <a href="{{ route('kunjungan.edit', ['kunjungan' => $kunjunganHamil->id]) }}" class="text-blue-600 hover:text-blue-800">
                                                     {{ $anggota->kelompok_sasaran }}
                                                 </a>)
                                             @else
-                                                <!-- Jika data kunjungan tidak ada, arahkan ke halaman create -->
+                                                <!-- Jika data kunjungan Ibu Hamil tidak ada, arahkan ke halaman create -->
                                                 <a href="{{ route('kunjungan.create', ['anggota_keluarga_id' => $anggota->id]) }}" class="text-blue-600 hover:text-blue-800">
                                                     {{ $anggota->kelompok_sasaran }}
                                                 </a>)
                                             @endif
+
+                                        @elseif($anggota->kelompok_sasaran === 'Ibu Bersalin & Nifas')
+                                            @php
+                                                // Cek apakah anggota ini memiliki data kunjungan Ibu Bersalin & Nifas
+                                                $kunjunganBersalin = $anggota->kunjunganIbuBersalinNifas ?? null;
+                                            @endphp
+                                            {{ $anggota->nama_lengkap }} ({{ $anggota->nik }},
+                                            @if($kunjunganBersalin)
+                                                <!-- Jika data kunjungan Ibu Bersalin & Nifas ada, arahkan ke halaman edit -->
+                                                <a href="{{ route('kunjungan-ibu-bersalin.edit', ['kunjungan_ibu_bersalin' => $kunjunganBersalin->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @else
+                                                <!-- Jika data kunjungan Ibu Bersalin & Nifas tidak ada, arahkan ke halaman create -->
+                                                <a href="{{ route('kunjungan-ibu-bersalin.create', ['anggota_keluarga_id' => $anggota->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @endif
+
+                                        @elseif($anggota->kelompok_sasaran === 'Bayi - Balita (0-6 bulan)')
+                                            @php
+                                                // Cek apakah anggota ini memiliki data kunjungan Bayi
+                                                $kunjunganBayi = $anggota->kunjunganBayi ?? null;
+                                            @endphp
+                                            {{ $anggota->nama_lengkap }} ({{ $anggota->nik }},
+                                            @if($kunjunganBayi)
+                                                <!-- Jika data kunjungan Bayi ada, arahkan ke halaman edit -->
+                                                <a href="{{ route('kunjungan-bayi.edit', ['kunjungan_bayi' => $kunjunganBayi->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @else
+                                                <!-- Jika data kunjungan Bayi tidak ada, arahkan ke halaman create -->
+                                                <a href="{{ route('kunjungan-bayi.create', ['anggota_keluarga_id' => $anggota->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @endif
+
+                                            @elseif($anggota->kelompok_sasaran === 'Balita dan Apras (≥6 - 71 bulan)')
+                                            @php
+                                                // Ambil data kunjungan balita apras
+                                                $kunjunganBalitaApras = $anggota->kunjunganRumahBalitaApras;
+                                            @endphp
+                                            {{ $anggota->nama_lengkap }} ({{ $anggota->nik }},
+                                            @if($kunjunganBalitaApras)
+                                                <!-- Jika data kunjungan Balita Apras ada, arahkan ke halaman edit -->
+                                                <a href="{{ route('kunjungan-rumah-balita-apras.edit', ['kunjungan_rumah_balita_apra' => $kunjunganBalitaApras->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @else
+                                                <!-- Jika data kunjungan Balita Apras tidak ada, arahkan ke halaman create -->
+                                                <a href="{{ route('kunjungan-rumah-balita-apras.create', ['anggota_keluarga_id' => $anggota->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @endif
+                                            @elseif($anggota->kelompok_sasaran === 'Usia Sekolah & Remaja (≥6 - 18 tahun)')
+                                            @php
+                                                // Ambil data kunjungan-remaja
+                                                $kunjunganRemaja = $anggota->kunjunganRemaja;
+                                            @endphp
+                                            {{ $anggota->nama_lengkap }} ({{ $anggota->nik }},
+                                            @if($kunjunganRemaja)
+                                                <!-- Jika data kunjungan-remaja ada, arahkan ke halaman edit -->
+                                                <a href="{{ route('kunjungan-rumah-usia-remaja.edit', ['kunjungan_remaja' => $kunjunganRemaja->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @else
+                                                <!-- Jika data kunjungan-remaja tidak ada, arahkan ke halaman create -->
+                                                <a href="{{ route('kunjungan-rumah-usia-remaja.create', ['anggota_keluarga_id' => $anggota->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @endif
                                         @else
-                                            <!-- Jika bukan kelompok sasaran Ibu Hamil, tampilkan tanpa tautan -->
+                                            <!-- Jika bukan kelompok sasaran Ibu Hamil, Ibu Bersalin & Nifas, atau Bayi - Balita, tampilkan tanpa tautan -->
                                             {{ $anggota->nama_lengkap }} ({{ $anggota->nik }}, {{ $anggota->kelompok_sasaran }})
                                         @endif
                                     @endforeach
+
+
 
 
                                         </ul>

@@ -35,4 +35,21 @@ class AnggotaKeluarga extends Model
         return $this->hasOne(KunjunganIbuHamil::class, 'anggota_keluarga_id');
     }
 
+    public function KunjunganIbuBersalinNifas()
+    {
+        return $this->hasOne(KunjunganIbuBersalinNifas::class, 'anggota_keluarga_id');
+    }
+    public function kunjunganBayi()
+    {
+        return $this->hasOne(KunjunganBayi::class,'anggota_keluarga_id');
+    }
+    public function KunjunganRumahBalitaApras()
+    {
+        return $this->hasOne(KunjunganRumahBalitaApras::class,'anggota_keluarga_id');
+    }
+    public function kunjunganRemaja()
+    {
+        return $this->hasOne(KunjunganRumahBalitaApras::class,'anggota_keluarga_id');
+    }
+
 }

@@ -56,5 +56,31 @@
         console.log('DataTables initialized successfully');
     });
 </script>   
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- SweetAlert untuk pesan sukses -->
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Sukses',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+
+<!-- SweetAlert untuk pesan error -->
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Kesalahan',
+            text: '{{ session('error') }}',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+
     </body>
 </html>

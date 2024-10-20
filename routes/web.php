@@ -6,6 +6,11 @@ use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KunjunganIbuHamilController;
+use App\Http\Controllers\KunjunganBayiController;
+use App\Http\Controllers\KunjunganRumahBalitaAprasController;
+use App\Http\Controllers\KunjunganIbuBersalinNifasController;
+use App\Http\Controllers\KunjunganRumahUsiaRemajaController;
+
 use App\Exports\KeluargaExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -60,10 +65,8 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::resource('kunjungan', KunjunganIbuHamilController::class);
-
-
-Route::resource('kunjungan_ibu_bersalin_nifas', KunjunganIbuBersalinNifasController::class);
-
-
-
+Route::resource('kunjungan-ibu-bersalin', KunjunganIbuBersalinNifasController::class);
+Route::resource('kunjungan-bayi', KunjunganBayiController::class);
+Route::resource('kunjungan-rumah-balita-apras', KunjunganRumahBalitaAprasController::class);
+Route::resource('kunjungan-rumah-usia-remaja', KunjunganRumahUsiaRemajaController::class);
 require __DIR__.'/auth.php';
