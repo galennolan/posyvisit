@@ -7,9 +7,9 @@
             <ol class="list-reset flex text-sm">
                 <li><a href="/dashboard" class="text-blue-600 hover:text-blue-800">Home</a></li>
                 <li><span class="mx-2">/</span></li>
-                <li class="text-blue-600 font-semibold"><a href="{{ route('kunjungan-remaja.index') }}" class="text-blue-600 hover:text-blue-800">Kunjungan Usia Sekolah dan Remaja</a></li>
+                <li class="text-blue-600 font-semibold"><a href="{{ route('kunjungan-rumah-usia-remaja.index') }}" class="text-blue-600 hover:text-blue-800">Kunjungan Usia Sekolah dan Remaja</a></li>
             </ol>
-        </nav>
+        </nav>kunjungan-rumah-usia-remaja
     </x-slot>
 
     <div class="py-12" x-data="modalHandler()">
@@ -18,7 +18,7 @@
                 <h3 class="text-lg font-semibold text-gray-700 mb-4">Daftar Kunjungan</h3>
                 
                 <!-- Form Pencarian -->
-                <form method="GET" action="{{ route('kunjungan-remaja.index') }}" class="mb-4">
+                <form method="GET" action="{{ route('kunjungan-rumah-usia-remaja.index') }}" class="mb-4">
                     <div class="flex">
                         <input type="text" name="search" value="{{ request('search') }}" class="border border-gray-300 rounded-md py-2 px-4" placeholder="Cari Nama Anak...">
                         <button type="submit" class="ml-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Cari</button>
@@ -40,7 +40,11 @@
                             @forelse($kunjungan_remaja as $index => $kunjungan)
                                 <tr class="hover:bg-gray-50 transition duration-200">
                                     <td class="px-4 py-2 text-sm text-gray-500">{{ $kunjungan_remaja->firstItem() + $index }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-700">{{ $kunjungan->anggotaKeluarga->nama_lengkap }}</td>
+                                    <td class="px-4 py-2 text-sm text-gray-700">@if($kunjungan->anggotaKeluarga)
+                                        {{ $kunjungan->anggotaKeluarga->nama_lengkap }}
+                                    @else
+                                        -
+                                    @endif</td>
                                     <td class="px-4 py-2 text-sm text-gray-700">{{ $kunjungan->umur_anak }} tahun</td>
                                     <td class="px-4 py-2 text-sm text-gray-700">{{ \Carbon\Carbon::parse($kunjungan->tanggal_kunjungan)->format('d/m/Y') }}</td>
                                     <td class="px-4 py-2 flex space-x-2">
@@ -48,8 +52,8 @@
                                         <button class="text-blue-500 hover:text-blue-700" @click="openModal({{ $kunjungan->id }})">
                                             Lihat
                                         </button>
-                                        <a href="{{ route('kunjungan-remaja.edit', $kunjungan->id) }}" class="text-yellow-500 hover:text-yellow-700">Edit</a>
-                                        <form action="{{ route('kunjungan-remaja.destroy', $kunjungan->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                        <a href="{{ route('kunjungan-rumah-usia-remaja.edit', $kunjungan->id) }}" class="text-yellow-500 hover:text-yellow-700">Edit</a>
+                                        <form action="{{ route('kunjungan-rumah-usia-remaja.destroy', $kunjungan->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-500 hover:text-red-700">Hapus</button>
@@ -102,7 +106,7 @@
                                 openModal(id) {
                                     this.isOpen = true;
                                     // Menggunakan AJAX untuk mendapatkan data detail kunjungan
-                                    fetch(`/kunjungan-remaja/${id}`)
+                                    fetch(`/kunjungan-rumah-usia-remaja/${id}`)
                                         .then(response => response.text())
                                         .then(html => {
                                             this.modalContent = html; // Menampilkan konten di dalam modal

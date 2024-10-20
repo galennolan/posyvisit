@@ -1,4 +1,4 @@
-<div class="text-left text-sm">
+<div class="text-left text-sm md:text-base">    
     <p><strong>Tanggal Pengumpulan Data:</strong> {{ \Carbon\Carbon::parse($keluarga->tanggal_pengumpulan_data)->format('d/m/Y') }}</p>
     <p><strong>Alamat:</strong> {{ $keluarga->alamat }}</p>
     <p><strong>No Handphone:</strong> {{ $keluarga->no_handphone }}</p>

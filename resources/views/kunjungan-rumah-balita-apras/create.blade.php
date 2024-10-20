@@ -394,14 +394,13 @@
                         </div> <!-- Akhir Grid -->
 
                         <!-- Submit Button -->
-                        <div class="flex justify-end mt-6">
-                            <!-- Tombol Kembali -->
-                            <a href="{{ route('kunjungan-rumah-balita-apras.index') }}" class="ml-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow inline-block text-center">
+                        <div class="flex justify-end items-center mt-6 space-x-2">
+                            <button type="submit" class="bg-gray-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
+                                Submit
+                            </button>
+                            <a href="{{ route('keluarga') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow text-center">
                                 Kembali
                             </a>
-                            <button type="submit" class="ml-2 bg-gray-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
-                                Simpan
-                            </button>
                         </div>
                     </form>
                 </div>

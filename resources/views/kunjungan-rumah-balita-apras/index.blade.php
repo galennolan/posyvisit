@@ -113,7 +113,7 @@
                                     this.modalContent = ''; // Kosongkan konten modal saat ditutup
                                 }
                             };
-                        }
+                        }`
                     </script>
 
                 </div>

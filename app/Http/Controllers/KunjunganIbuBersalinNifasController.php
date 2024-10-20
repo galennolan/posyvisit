@@ -54,7 +54,7 @@ class KunjunganIbuBersalinNifasController extends Controller
             'inisiasi_menyusu_dini' => $request->inisiasi_menyusu_dini,
         ]);
 
-        KunjunganIbuBersalinNifas::create($request->all());
+       
         
         return redirect()->route('kunjungan-ibu-bersalin.index')->with('success', 'Data kunjungan Ibu Bersalin Nifas berhasil disimpan.');
     }

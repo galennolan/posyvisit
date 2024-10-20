@@ -334,9 +334,9 @@
                                     <option value="Ibu Hamil" {{ $anggota->kelompok_sasaran == 'Ibu Hamil' ? 'selected' : '' }}>Ibu Hamil</option>
                                     <option value="Ibu Bersalin & Nifas" {{ $anggota->kelompok_sasaran == 'Ibu Bersalin & Nifas' ? 'selected' : '' }}>Ibu Bersalin & Nifas</option>
                                     <option value="Bayi - Balita (0-6 bulan)" {{ $anggota->kelompok_sasaran == 'Bayi - Balita (0-6 bulan)' ? 'selected' : '' }}>Bayi - Balita (0-6 bulan)</option>
-                                    <option value="Balita dan Apras (≥6 - 71 bulan)" {{ $anggota->kelompok_sasaran == 'Balita dan Apras (≥6 - 71 bulan)' ? 'selected' : '' }}>Balita dan Apras (≥6 - 71 bulan)</option>
-                                    <option value="Usia Sekolah & Remaja (≥6 - <18 tahun)" {{ $anggota->kelompok_sasaran == 'Usia Sekolah & Remaja (≥6 - <18 tahun)' ? 'selected' : '' }}>Usia Sekolah & Remaja (≥6 - <18 tahun)</option>
-                                    <option value="Usia Dewasa (≥18-59 tahun)" {{ $anggota->kelompok_sasaran == 'Usia Dewasa (≥18-59 tahun)' ? 'selected' : '' }}>Usia Dewasa (≥18-59 tahun)</option>
+                                    <option value="Balita dan Apras (6 - 71 bulan)" {{ $anggota->kelompok_sasaran == 'Balita dan Apras (6 - 71 bulan)' ? 'selected' : '' }}>Balita dan Apras (6 - 71 bulan)</option>
+                                    <option value="Usia Sekolah & Remaja" {{ $anggota->kelompok_sasaran == 'Usia Sekolah & Remaja' ? 'selected' : '' }}>Usia Sekolah & Remaja</option>
+                                    <option value="Usia Dewasa (18-59 tahun)" {{ $anggota->kelompok_sasaran == 'Usia Dewasa (18-59 tahun)' ? 'selected' : '' }}>Usia Dewasa (18-59 tahun)</option>
                                     <option value="Lansia (≥60 tahun)" {{ $anggota->kelompok_sasaran == 'Lansia (≥60 tahun)' ? 'selected' : '' }}>Lansia (≥60 tahun)</option>
                                 </select>
                             </div>
@@ -349,15 +349,13 @@
                     </button>
                 </div>
 
-                <div class="flex justify-end mt-6">
-                    <button type="submit" class="ml-2 bg-gray-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
-                        Simpan Perubahan
+                <div class="flex justify-end items-center mt-6 space-x-2">
+                    <button type="submit" class="bg-gray-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
+                        Submit
                     </button>
-
-                    <a href="{{ route('keluarga') }}" class="ml-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow inline-block text-center">
+                    <a href="{{ route('keluarga') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow text-center">
                         Kembali
                     </a>
-
                 </div>
             </form>
         </div>
@@ -459,9 +457,9 @@
                             <option value="Ibu Hamil">Ibu Hamil</option>
                             <option value="Ibu Bersalin & Nifas">Ibu Bersalin & Nifas</option>
                             <option value="Bayi - Balita (0-6 bulan)" {{ $anggota->kelompok_sasaran == 'Bayi - Balita (0-6 bulan)' ? 'selected' : '' }}>Bayi - Balita (0-6 bulan)</option>
-                            <option value="Balita dan Apras (≥6 - 71 bulan)" {{ $anggota->kelompok_sasaran == 'Balita dan Apras (≥6 - 71 bulan)' ? 'selected' : '' }}>Balita dan Apras (≥6 - 71 bulan)</option>
-                            <option value="Usia Sekolah & Remaja (≥6 - <18 tahun)">Usia Sekolah & Remaja (≥6 - <18 tahun)</option>
-                            <option value="Usia Dewasa (≥18-59 tahun)">Usia Dewasa (≥18-59 tahun)</option>
+                            <option value="Balita dan Apras (6 - 71 bulan)" {{ $anggota->kelompok_sasaran == 'Balita dan Apras (6 - 71 bulan)' ? 'selected' : '' }}>Balita dan Apras (6 - 71 bulan)</option>
+                            <option value="Usia Sekolah & Remaja">Usia Sekolah & Remaja</option>
+                            <option value="Usia Dewasa (18-59 tahun)">Usia Dewasa (18-59 tahun)</option>
                             <option value="Lansia (≥60 tahun)">Lansia (≥60 tahun)</option>
                         </select>
                     </div>

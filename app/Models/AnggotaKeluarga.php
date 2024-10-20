@@ -49,7 +49,18 @@ class AnggotaKeluarga extends Model
     }
     public function kunjunganRemaja()
     {
-        return $this->hasOne(KunjunganRumahBalitaApras::class,'anggota_keluarga_id');
+        return $this->hasOne(KunjunganRumahUsiaRemaja::class,'anggota_keluarga_id');
     }
-
+    public function kunjunganLansia()
+    {
+        return $this->hasOne(KunjunganLansia::class,'anggota_keluarga_id');
+    }
+    public function KunjunganUsiaDewasa()
+    {
+        return $this->hasOne(KunjunganUsiaDewasa::class,'anggota_keluarga_id');
+    }
+    public function KunjunganTBC()
+    {
+        return $this->hasOne(KunjunganTBC::class,'anggota_keluarga_id');
+    }
 }

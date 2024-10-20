@@ -54,10 +54,10 @@ class KunjunganRumahBalitaAprasController extends Controller
             // Validasi data
             $validatedData = $request->validate([
                 'anggota_keluarga_id' => 'required|exists:anggota_keluargas,id',
-                'waktu_kunjungan' => 'required|date',
-                'tanggal' => 'required|date',
-                'suhu_tubuh' => 'required|numeric',
-                'ada_buku_kia' => 'required|boolean',
+                'waktu_kunjungan' => 'nullable|date',
+                'tanggal' => 'nullable|date',
+                'suhu_tubuh' => 'nullable|numeric',
+                'ada_buku_kia' => 'nullable|boolean',
                 'tanggal_terakhir_menimbang_mengukur' => 'nullable|date',
                 'hasil_penimbangan' => 'nullable|string',
                 'bb' => 'nullable|numeric',

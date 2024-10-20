@@ -28,15 +28,16 @@ class KeluargaController extends Controller
             ->whereHas('user', function ($query) use ($user) {
                 $query->where('kecamatan', '=', $user->kecamatan)
                     ->where('kelurahan', '=', $user->kelurahan);
-            })
-        ->get();
-        } else if ($user->hasRole('PetugasKesehatan')) {
+            })->get();
+        } elseif ($user->hasRole('KetuaPosyandu')) {
+            // Jika KetuaPosyandu, hanya ambil data keluarga yang sesuai dengan nama_posyandu user
+            $keluargas = Keluarga::with('anggotaKeluarga')
+                ->where('pustu', $user->nama_posyandu)
+                ->get();
+        }else if ($user->hasRole('PetugasKesehatan')) {
             // Jika bukan admin, hanya ambil data keluarga sesuai dengan kelurahan user
-             $keluargas = Keluarga::with('anggotaKeluarga')
-            ->whereHas('user', function ($query) use ($user) {
-                $query->where('kecamatan', $user->kecamatan)
-                      ->where('kelurahan', $user->kelurahan);
-            })
+            $keluargas = Keluarga::with('anggotaKeluarga')
+            ->where('kecamatan', $user->kecamatan)
             ->get();
         } else {
             // Jika tidak memiliki role yang tepat, tampilkan data kosong atau redirect
@@ -67,7 +68,13 @@ class KeluargaController extends Controller
                 $subQuery->where('kecamatan', '=', $user->kecamatan)
                         ->where('kelurahan', '=', $user->kelurahan);
             });
-        } else if ($user->hasRole('PetugasKesehatan')) {
+        }  else if ($user->hasRole('KetuaPosyandu')) {
+            // Filter untuk peran KetuaPosyandu
+            $query->whereHas('user', function ($subQuery) use ($user) {
+                $subQuery->where('kecamatan', '=', $user->kecamatan)
+                        ->where('kelurahan', '=', $user->kelurahan);
+        });
+         }else if ($user->hasRole('PetugasKesehatan')) {
             // Filter untuk peran PetugasKesehatan
             $query->whereHas('user', function ($subQuery) use ($user) {
                 $subQuery->where('kecamatan', $user->kecamatan)
@@ -94,11 +101,11 @@ class KeluargaController extends Controller
 
     public function create()
     {
-        if (auth()->user()->hasRole('Kader')) {
+        if (auth()->user()->hasRole('Kader') || auth()->user()->hasRole('KetuaPosyandu')) {
             return view('keluarga.create');
         }
     
-        abort(403, 'Yang Bisa Input Data hanya Kader.');
+        abort(403, 'Yang Bisa Input Data hanya Kader dan Ketua Posyandu.');
     }
 
     public function show($id)
@@ -149,7 +156,7 @@ class KeluargaController extends Controller
                     'anggota.*.status_perkawinan' => 'required|in:1,2,3,4',
                     'anggota.*.pendidikan_terakhir' => 'required|in:1,2,3,4,5,6',
                     'anggota.*.pekerjaan' => 'required|in:1,2,3,4,5,6,7',
-                    'anggota.*.kelompok_sasaran' => 'required|in:Ibu Hamil,Ibu Bersalin & Nifas,Bayi - Balita (0-6 tahun),Usia Sekolah & Remaja (≥6 - <18 tahun),Usia Dewasa (≥18-59 tahun),Lansia (≥60 tahun)',
+                    'anggota.*.kelompok_sasaran' => 'required|in:Ibu Hamil,Ibu Bersalin & Nifas,Bayi - Balita (0-6 bulan),Usia Sekolah & Remaja,Usia Dewasa (18-59 tahun),Lansia (≥60 tahun)',
                 ], [
                     'anggota.*.nik.unique' => 'NIK sudah terdaftar. Silakan masukkan NIK yang lain.',
                 ]);
@@ -219,98 +226,101 @@ class KeluargaController extends Controller
         return view('keluarga.edit', compact('keluarga', 'kecamatanOptions'));
     }
 
-    public function update(Request $request, $id)
-{
-    try {
-        // Validasi data keluarga
-        $validatedKeluarga = $request->validate([
-            'tanggal_pengumpulan_data' => 'required|date',
-            'alamat' => 'required|string|max:255',
-            'no_handphone' => 'required|digits_between:10,15',
-            'kabupaten' => 'required|string|max:100',
-            'kecamatan' => 'required|string|max:100',
-            'kelurahan' => 'required|string|max:100',
-            'puskesmas' => 'nullable|string|max:100',
-            'pustu' => 'nullable|string|max:100',
-            'provinsi' => 'required|string|max:100',
-                'jkn' => 'required|in:Ya,Tidak',
-                'sarana_air_bersih' => 'required|in:Ya,Tidak',
-                'jenis_sumber_air' => 'nullable|in:Terlindung,Tidak_Terlindung',
-                'jamban_keluarga' => 'required|in:Ya,Tidak',
-                'jenis_jamban' => 'nullable|in:Saniter,Tidak_Saniter',
-                'ventilasi' => 'required|in:Ya,Tidak',
-                'gangguan_jiwa' => 'required|in:Ya,Tidak',
-                'terdiagnosis_penyakit' => 'required|in:Ya,Tidak',
-        ]);
 
-        $validatedKeluarga['id_user'] = auth()->user()->id;
-
-        // Validasi data anggota keluarga baru jika ada
-        if ($request->has('anggota') && !empty($request->input('anggota'))) {
-            $validatedAnggota = $request->validate([
-                'anggota.*.nama_lengkap' => 'required|string|max:255',
-                'anggota.*.nik' => [
-                    'required',
-                    'digits:16',
-                    Rule::unique('anggota_keluargas', 'nik')->where(function ($query) use ($id) {
-                        return $query->where('keluarga_id', '!=', $id);
-                    }),
-                ],
-                'anggota.*.tanggal_lahir' => 'required|date|before:today',
-                'anggota.*.jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
-                'anggota.*.hubungan_kk' => 'required|in:1,2,3,4,5,6,7,8,9',
-                'anggota.*.status_perkawinan' => 'required|in:1,2,3,4',
-                'anggota.*.pendidikan_terakhir' => 'required|in:1,2,3,4,5,6',
-                'anggota.*.pekerjaan' => 'required|in:1,2,3,4,5,6,7',
-                'anggota.*.kelompok_sasaran' => 'required|in:Ibu Hamil,Ibu Bersalin & Nifas,Bayi - Balita (0-6 bulan),Balita dan Apras (≥6 - 71 bulan),Usia Sekolah & Remaja (≥6 - <18 tahun),Usia Dewasa (≥18-59 tahun),Lansia (≥60 tahun)',
-            ], [
-                'anggota.*.nik.unique' => 'NIK sudah terdaftar. Silakan masukkan NIK yang lain.',
-            ]);
-        }
+   public function update(Request $request, $id)
+        {
+            try {
+                // Validasi data keluarga
+                $validatedKeluarga = $request->validate([
+                    'tanggal_pengumpulan_data' => 'required|date',
+                    'alamat' => 'required|string|max:255',
+                    'no_handphone' => 'required|digits_between:10,15',
+                    'kabupaten' => 'required|string|max:100',
+                    'kecamatan' => 'required|string|max:100',
+                    'kelurahan' => 'required|string|max:100',
+                    'puskesmas' => 'nullable|string|max:100',
+                    'pustu' => 'nullable|string|max:100',
+                    'provinsi' => 'required|string|max:100',
+                    'jkn' => 'required|in:Ya,Tidak',
+                    'sarana_air_bersih' => 'required|in:Ya,Tidak',
+                    'jenis_sumber_air' => 'nullable|in:Terlindung,Tidak_Terlindung',
+                    'jamban_keluarga' => 'required|in:Ya,Tidak',
+                    'jenis_jamban' => 'nullable|in:Saniter,Tidak_Saniter',
+                    'ventilasi' => 'required|in:Ya,Tidak',
+                    'gangguan_jiwa' => 'required|in:Ya,Tidak',
+                    'terdiagnosis_penyakit' => 'required|in:Ya,Tidak',
+                ]);
         
+              
+        
+                // Update data keluarga
+                $keluarga = Keluarga::findOrFail($id);
+                $keluarga->update($validatedKeluarga);
+        
+              // Handle anggota keluarga updates
+            if ($request->has('anggota') && !empty($request->input('anggota'))) {
+                $validatedAnggota = $request->validate([
+                    'anggota.*.nama_lengkap' => 'required|string|max:255',
+                    'anggota.*.nik' => [
+                        'required',
+                        'digits:16',
+                        Rule::unique('anggota_keluargas', 'nik')->where(function ($query) use ($id) {
+                            return $query->where('keluarga_id', '!=', $id);
+                        }),
+                    ],
+                    'anggota.*.tanggal_lahir' => 'required|date|before:today',
+                    'anggota.*.jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
+                    'anggota.*.hubungan_kk' => 'required|in:1,2,3,4,5,6,7,8,9',
+                    'anggota.*.status_perkawinan' => 'required|in:1,2,3,4',
+                    'anggota.*.pendidikan_terakhir' => 'required|in:1,2,3,4,5,6',
+                    'anggota.*.pekerjaan' => 'required|in:1,2,3,4,5,6,7',
+                    'anggota.*.kelompok_sasaran' => 'required|in:Ibu Hamil,Ibu Bersalin & Nifas,Bayi - Balita (0-6 bulan),Balita dan Apras (6 - 71 bulan),Usia Sekolah & Remaja,Usia Dewasa (18-59 tahun),Lansia (≥60 tahun)',
+                ], [
+                    'anggota.*.nik.unique' => 'NIK sudah terdaftar. Silakan masukkan NIK yang lain.',
+                ]);
 
-        // Update data keluarga
-        $keluarga = Keluarga::findOrFail($id);
-        $keluarga->update($validatedKeluarga);
+                // Update existing anggota keluarga or create new ones if they do not exist
+                foreach ($validatedAnggota['anggota'] as $index => $anggotaData) {
+                    $anggotaKeluarga = $keluarga->anggotaKeluarga()->where('nik', $anggotaData['nik'])->first();
 
-        // Hapus anggota lama jika validasi berhasil
-        $keluarga->anggotaKeluarga()->delete();
-
-        // Simpan anggota baru
-        if (isset($validatedAnggota)) {
-            foreach ($validatedAnggota['anggota'] as $anggotaData) {
-                $keluarga->anggotaKeluarga()->create($anggotaData);
+                    if ($anggotaKeluarga) {
+                        // Update the existing record
+                        $anggotaKeluarga->update($anggotaData);
+                    } else {
+                        // Create a new record if it does not exist
+                        $anggotaData['keluarga_id'] = $id;
+                        $keluarga->anggotaKeluarga()->create($anggotaData);
+                    }
+                }
+            }
+                // Kirim pesan sukses ke view menggunakan session
+                return redirect()->route('keluarga')->with('success', 'Data keluarga berhasil diperbarui.');
+            } catch (ValidationException $e) {
+                // Log validasi error
+                Log::error('Validasi gagal dengan pesan:', ['errors' => $e->errors()]);
+        
+                // Cek apakah kesalahan validasi terkait NIK yang sudah terdaftar
+                $errors = $e->errors();
+                
+                // Debug log untuk melihat error detail
+                Log::debug('Debugging error untuk validasi:', ['request_data' => $request->all(), 'errors' => $errors]);
+        
+                // Cek apakah ada kesalahan terkait NIK yang sudah terdaftar
+                $nikErrors = array_filter($errors, function($key) {
+                    return strpos($key, 'anggota.') !== false && strpos($key, 'nik') !== false;
+                }, ARRAY_FILTER_USE_KEY);
+        
+                if ($nikErrors) {
+                    Log::error('Validasi NIK sudah terdaftar.', ['nik_errors' => $nikErrors]);
+                    return redirect()->back()->with('error', 'Validasi Gagal: NIK sudah terdaftar.')->withErrors($errors)->withInput();
+                }
+        
+                return redirect()->back()->withErrors($e->errors())->withInput();
+            } catch (\Exception $e) {
+                Log::error('Terjadi kesalahan umum saat memperbarui data keluarga.', ['error' => $e->getMessage()]);
+                return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui data keluarga.')->withInput();
             }
         }
-
-        // Kirim pesan sukses ke view menggunakan session
-        return redirect()->route('keluarga')->with('success', 'Data keluarga berhasil diperbarui.');
-    } catch (ValidationException $e) {
-        // Log validasi error
-        Log::error('Validasi gagal dengan pesan:', ['errors' => $e->errors()]);
-
-        // Cek apakah kesalahan validasi terkait NIK yang sudah terdaftar
-        $errors = $e->errors();
-        
-        // Debug log untuk melihat error detail
-        Log::debug('Debugging error untuk validasi:', ['request_data' => $request->all(), 'errors' => $errors]);
-
-        // Cek apakah ada kesalahan terkait NIK yang sudah terdaftar
-        $nikErrors = array_filter($errors, function($key) {
-            return strpos($key, 'anggota.') !== false && strpos($key, 'nik') !== false;
-        }, ARRAY_FILTER_USE_KEY);
-
-        if ($nikErrors) {
-            Log::error('Validasi NIK sudah terdaftar.', ['nik_errors' => $nikErrors]);
-            return redirect()->back()->with('error', 'Validasi Gagal: NIK sudah terdaftar.')->withErrors($errors)->withInput();
-        }
-
-        return redirect()->back()->withErrors($e->errors())->withInput();
-    } catch (\Exception $e) {
-        Log::error('Terjadi kesalahan umum saat memperbarui data keluarga.', ['error' => $e->getMessage()]);
-        return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui data keluarga.')->withInput();
-    }
-}
     
 
 

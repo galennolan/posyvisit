@@ -226,10 +226,13 @@
                     </div>
 
                     <!-- Tombol Simpan -->
-                    <div class="mt-6">
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
-                            Simpan
+                    <div class="flex justify-end items-center mt-6 space-x-2">
+                        <button type="submit" class="bg-gray-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
+                            Submit
                         </button>
+                        <a href="{{ route('keluarga') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow text-center">
+                            Kembali
+                        </a>
                     </div>
                 </form>
             </div>

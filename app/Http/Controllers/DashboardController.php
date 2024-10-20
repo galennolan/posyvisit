@@ -4,112 +4,111 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Keluarga; // Pastikan untuk mengimpor model Keluarga
-use App\Models\Posyandu; // Pastikan untuk mengimpor model Posyandu
+use App\Models\Keluarga;
 
 class DashboardController extends Controller
 {
-   public function index()
-{
-    // Ambil user yang sedang login
-    $user = Auth::user();
+    public function index()
+    {
+        // Ambil user yang sedang login
+        $user = Auth::user();
+        
+        // Inisialisasi variabel jumlah dan persentase keluarga serta anggota
+        $jumlahKeluarga = 0;
+        $jumlahAnggotaKeluarga = 0;
+        $persentaseKeluarga = 0;
+        $persentaseAnggotaKeluarga = 0;
 
-    // Inisialisasi jumlah keluarga, jumlah anggota, nama posyandu, dan kecamatan
-    $jumlahKeluarga = 0;
-    $jumlahAnggotaKeluarga = 0;
-    $persentaseKeluarga = 0;
-    $persentaseAnggotaKeluarga = 0;
-    $namaPosyandu = null; // Variabel untuk menyimpan nama posyandu
-    $kecamatan = null; // Variabel untuk menyimpan nama kecamatan
-
-    // Ambil total jumlah keluarga dan anggota
-    $totalKeluarga = Keluarga::count();
-    $totalAnggotaKeluarga = Keluarga::with('anggotaKeluarga')->get()->sum(function($keluarga) {
-        return $keluarga->anggotaKeluarga->count();
-    });
-
-    // Hitung jumlah berdasarkan kategori
-    $jumlahIbuHamil = Keluarga::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) {
-        $query->where('kelompok_sasaran', 'Ibu Hamil');
-    })->count();
-
-    $jumlahIbuBersalinNifas = Keluarga::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) {
-        $query->where('kelompok_sasaran', 'Ibu Bersalin & Nifas');
-    })->count();
-
-    $jumlahBayiBalita = Keluarga::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) {
-        $query->where('kelompok_sasaran', 'Bayi - Balita (0-6 bulan)');
-    })->count();
-
-    $jumlahUsiaSekolahRemaja = Keluarga::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) {
-        $query->where('kelompok_sasaran', 'Usia Sekolah & Remaja (≥6 - <18 tahun)');
-    })->count();
-
-    $jumlahUsiaDewasa = Keluarga::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) {
-        $query->where('kelompok_sasaran', 'Usia Dewasa (≥18-59 tahun)');
-    })->count();
-
-    $jumlahLansia = Keluarga::with('anggotaKeluarga')->whereHas('anggotaKeluarga', function ($query) {
-        $query->where('kelompok_sasaran', 'Lansia (≥60 tahun)');
-    })->count();
-
-    // Hitung persentase masing-masing kategori
-    $persentaseIbuHamil = ($totalAnggotaKeluarga > 0) ? ($jumlahIbuHamil / $totalAnggotaKeluarga) * 100 : 0;
-    $persentaseIbuBersalinNifas = ($totalAnggotaKeluarga > 0) ? ($jumlahIbuBersalinNifas / $totalAnggotaKeluarga) * 100 : 0;
-    $persentaseBayiBalita = ($totalAnggotaKeluarga > 0) ? ($jumlahBayiBalita / $totalAnggotaKeluarga) * 100 : 0;
-    $persentaseUsiaSekolahRemaja = ($totalAnggotaKeluarga > 0) ? ($jumlahUsiaSekolahRemaja / $totalAnggotaKeluarga) * 100 : 0;
-    $persentaseUsiaDewasa = ($totalAnggotaKeluarga > 0) ? ($jumlahUsiaDewasa / $totalAnggotaKeluarga) * 100 : 0;
-    $persentaseLansia = ($totalAnggotaKeluarga > 0) ? ($jumlahLansia / $totalAnggotaKeluarga) * 100 : 0;
-
-    // Cek apakah user adalah admin
-    if ($user->hasRole('admin')) {
-        $jumlahKeluarga = $totalKeluarga;
-        $jumlahAnggotaKeluarga = $totalAnggotaKeluarga;
-        $persentaseKeluarga = 100;
-        $persentaseAnggotaKeluarga = 100;
-    } else if ($user->hasRole('Kader')) {
-        // Ambil data keluarga berdasarkan kecamatan dan kelurahan pengguna
-        $keluargas = Keluarga::with('anggotaKeluarga')
-            ->whereHas('user', function ($query) use ($user) {
-                $query->where('kecamatan', '=', $user->kecamatan)
-                    ->where('kelurahan', '=', $user->kelurahan);
-            })->get();
-        $jumlahKeluarga = $keluargas->count();
-        $jumlahAnggotaKeluarga = $keluargas->sum(function($keluarga) {
+        // Hitung total keluarga dan anggota di seluruh sistem
+        $totalKeluarga = Keluarga::count();
+        $totalAnggotaKeluarga = Keluarga::with('anggotaKeluarga')->get()->sum(function($keluarga) {
             return $keluarga->anggotaKeluarga->count();
         });
-        $persentaseKeluarga = ($totalKeluarga > 0) ? ($jumlahKeluarga / $totalKeluarga) * 100 : 0;
-        $persentaseAnggotaKeluarga = ($totalAnggotaKeluarga > 0) ? ($jumlahAnggotaKeluarga / $totalAnggotaKeluarga) * 100 : 0;
 
-        // Ambil nama posyandu berdasarkan user
-        if ($user->posyandu_id) {
-            $posyandu = Posyandu::find($user->posyandu_id);
-            $namaPosyandu = $posyandu ? $posyandu->nama : null;
+        // Fungsi untuk menghitung kategori berdasarkan kelompok_sasaran
+        $calculateCategory = function ($keluargas, $kategori) {
+            return $keluargas->sum(function($keluarga) use ($kategori) {
+                return $keluarga->anggotaKeluarga->where('kelompok_sasaran', $kategori)->count();
+            });
+        };
+
+        // Jika user adalah 'admin', tampilkan seluruh data
+        if ($user->hasRole('admin')) {
+            $keluargas = Keluarga::with('anggotaKeluarga')
+                        ->get();
+            $jumlahKeluarga = $totalKeluarga;
+            $jumlahAnggotaKeluarga = $totalAnggotaKeluarga;
+            $persentaseKeluarga = 100;
+            $persentaseAnggotaKeluarga = 100;
         }
-    } else if ($user->hasRole('PetugasKesehatan')) {
-        $keluargas = Keluarga::with('anggotaKeluarga')
-            ->whereHas('user', function ($query) use ($user) {
-                $query->where('kecamatan', $user->kecamatan)
-                      ->where('kelurahan', $user->kelurahan);
-            })->get();
-        $jumlahKeluarga = $keluargas->count();
-        $jumlahAnggotaKeluarga = $keluargas->sum(function($keluarga) {
-            return $keluarga->anggotaKeluarga->count();
-        });
-        $persentaseKeluarga = ($totalKeluarga > 0) ? ($jumlahKeluarga / $totalKeluarga) * 100 : 0;
-        $persentaseAnggotaKeluarga = ($totalAnggotaKeluarga > 0) ? ($jumlahAnggotaKeluarga / $totalAnggotaKeluarga) * 100 : 0;
+        // Jika user adalah 'Kader', hanya tampilkan data yang terkait dengan id_user
+        else if ($user->hasRole('Kader')) {
+            $keluargas = Keluarga::with('anggotaKeluarga')
+                        ->where('id_user', $user->id)
+                        ->get();
+            
+            $jumlahKeluarga = $keluargas->count();
+            $jumlahAnggotaKeluarga = $keluargas->sum(function($keluarga) {
+                return $keluarga->anggotaKeluarga->count();
+            });
 
-        // Ambil nama kecamatan
-        $kecamatan = $user->kecamatan;
+            $persentaseKeluarga = ($totalKeluarga > 0) ? ($jumlahKeluarga / $totalKeluarga) * 100 : 0;
+            $persentaseAnggotaKeluarga = ($totalAnggotaKeluarga > 0) ? ($jumlahAnggotaKeluarga / $totalAnggotaKeluarga) * 100 : 0;
+        }
+        // Jika user adalah 'Kader', hanya tampilkan data yang terkait dengan id_user
+        else if ($user->hasRole('KetuaPosyandu')) {
+            $keluargas = Keluarga::with('anggotaKeluarga')
+                        ->where('pustu', $user->nama_posyandu)
+                        ->get();
+            
+            $jumlahKeluarga = $keluargas->count();
+            $jumlahAnggotaKeluarga = $keluargas->sum(function($keluarga) {
+                return $keluarga->anggotaKeluarga->count();
+            });
+
+            $persentaseKeluarga = ($totalKeluarga > 0) ? ($jumlahKeluarga / $totalKeluarga) * 100 : 0;
+            $persentaseAnggotaKeluarga = ($totalAnggotaKeluarga > 0) ? ($jumlahAnggotaKeluarga / $totalAnggotaKeluarga) * 100 : 0;
+        }
+        // Jika user adalah 'PetugasKesehatan', hanya tampilkan data berdasarkan kecamatan dan kelurahan
+        else if ($user->hasRole('PetugasKesehatan')) {
+            $keluargas = Keluarga::with('anggotaKeluarga')
+                        ->where('kecamatan', $user->kecamatan)
+                        ->get();
+            
+            $jumlahKeluarga = $keluargas->count();
+            $jumlahAnggotaKeluarga = $keluargas->sum(function($keluarga) {
+                return $keluarga->anggotaKeluarga->count();
+            });
+
+            $persentaseKeluarga = ($totalKeluarga > 0) ? ($jumlahKeluarga / $totalKeluarga) * 100 : 0;
+            $persentaseAnggotaKeluarga = ($totalAnggotaKeluarga > 0) ? ($jumlahAnggotaKeluarga / $totalAnggotaKeluarga) * 100 : 0;
+        }
+
+        // Hitung kategori untuk masing-masing kelompok sasaran
+        $jumlahIbuHamil = $calculateCategory($keluargas, 'Ibu Hamil');
+        $jumlahIbuBersalinNifas = $calculateCategory($keluargas, 'Ibu Bersalin & Nifas');
+        $jumlahBayiBalita = $calculateCategory($keluargas, 'Bayi - Balita (0-6 bulan)');
+        $jumlahBayiApras = $calculateCategory($keluargas, 'Balita dan Apras (6 - 71 bulan)');
+        $jumlahUsiaSekolahRemaja = $calculateCategory($keluargas, 'Usia Sekolah & Remaja');
+        $jumlahUsiaDewasa = $calculateCategory($keluargas, 'Usia Dewasa (18-59 tahun)');
+        $jumlahLansia = $calculateCategory($keluargas, 'Lansia (≥60 tahun)');
+
+        // Hitung persentase untuk masing-masing kategori
+        $persentaseIbuHamil = ($jumlahAnggotaKeluarga > 0) ? ($jumlahIbuHamil / $jumlahAnggotaKeluarga) * 100 : 0;
+        $persentaseIbuBersalinNifas = ($jumlahAnggotaKeluarga > 0) ? ($jumlahIbuBersalinNifas / $jumlahAnggotaKeluarga) * 100 : 0;
+        $persentaseBayiBalita = ($jumlahAnggotaKeluarga > 0) ? ($jumlahBayiBalita / $jumlahAnggotaKeluarga) * 100 : 0;
+        $persentaseBayiApras = ($jumlahAnggotaKeluarga > 0) ? ($jumlahBayiApras / $jumlahAnggotaKeluarga) * 100 : 0;
+        $persentaseUsiaSekolahRemaja = ($jumlahAnggotaKeluarga > 0) ? ($jumlahUsiaSekolahRemaja / $jumlahAnggotaKeluarga) * 100 : 0;
+        $persentaseUsiaDewasa = ($jumlahAnggotaKeluarga > 0) ? ($jumlahUsiaDewasa / $jumlahAnggotaKeluarga) * 100 : 0;
+        $persentaseLansia = ($jumlahAnggotaKeluarga > 0) ? ($jumlahLansia / $jumlahAnggotaKeluarga) * 100 : 0;
+
+        // Kirim data ke view
+        return view('dashboard', compact(
+            'jumlahKeluarga', 'jumlahAnggotaKeluarga', 'persentaseKeluarga', 'persentaseAnggotaKeluarga',
+            'jumlahIbuHamil', 'persentaseIbuHamil', 'jumlahIbuBersalinNifas', 'persentaseIbuBersalinNifas',
+            'jumlahBayiBalita', 'persentaseBayiBalita', 'jumlahBayiApras', 'persentaseBayiApras',
+            'jumlahUsiaSekolahRemaja', 'persentaseUsiaSekolahRemaja', 'jumlahUsiaDewasa', 'persentaseUsiaDewasa',
+            'jumlahLansia', 'persentaseLansia'
+        ));
     }
-
-    // Kirim data ke view
-    return view('dashboard', compact(
-        'jumlahKeluarga', 'jumlahAnggotaKeluarga', 'persentaseKeluarga', 'persentaseAnggotaKeluarga', 'namaPosyandu', 'kecamatan',
-        'jumlahIbuHamil', 'persentaseIbuHamil', 'jumlahIbuBersalinNifas', 'persentaseIbuBersalinNifas',
-        'jumlahBayiBalita', 'persentaseBayiBalita', 'jumlahUsiaSekolahRemaja', 'persentaseUsiaSekolahRemaja',
-        'jumlahUsiaDewasa', 'persentaseUsiaDewasa', 'jumlahLansia', 'persentaseLansia'
-    ));
-}
-
 }

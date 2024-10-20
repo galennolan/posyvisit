@@ -26,7 +26,7 @@ class KunjunganIbuHamilController extends Controller
         // Validasi input
         $request->validate([
             'anggota_keluarga_id' => 'required|string',
-            'umur' => 'required|integer',
+            'umur' => 'nullable|integer',
             'kehamilan_ke' => 'required|integer',
             'jarak_kehamilan' => 'nullable|string',
             'waktu_kunjungan' => 'required|date',

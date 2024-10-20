@@ -15,9 +15,15 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @if(Auth::user()->hasAnyRole(['admin', 'PetugasKesehatan','KetuaPosyandu']))
+                         <x-nav-link :href="route('statistik')" :active="request()->routeIs('statistik')">
+                            {{ __('Statistik') }}
+                        </x-nav-link>
+                    @endif
                     <x-nav-link :href="route('keluarga')" :active="request()->routeIs('keluarga')">
                         {{ __('Kunjungan Rumah') }}
                     </x-nav-link>
+                    
                 </div>
             </div>
 
@@ -77,6 +83,10 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+               <!-- Kunjungan Rumah (Tambahan) -->
+               <x-responsive-nav-link :href="route('statistik')" :active="request()->routeIs('keluarga')">
+                {{ __('Statistik') }}
             </x-responsive-nav-link>
             <!-- Kunjungan Rumah (Tambahan) -->
             <x-responsive-nav-link :href="route('keluarga')" :active="request()->routeIs('keluarga')">

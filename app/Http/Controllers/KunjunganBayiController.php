@@ -24,6 +24,7 @@ class KunjunganBayiController extends Controller
         $kunjungan_bayi = $query->paginate(10);
 
         return view('kunjungan-bayi.index', compact('kunjungan_bayi'));
+        
     }
 
     /**

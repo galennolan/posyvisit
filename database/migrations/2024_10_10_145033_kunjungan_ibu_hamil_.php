@@ -35,7 +35,7 @@ return new class extends Migration
             $table->enum('ttd', ['Ya', 'Tidak'])->default('Tidak'); // Pemberian Tablet Tambah Darah (TTD)
             $table->enum('ttd_ditunjukkan', ['Ya', 'Tidak'])->default('Tidak'); // Apakah TTD ditunjukkan
             $table->enum('ttd_dikonsumsi', ['Ya', 'Tidak'])->default('Tidak'); // Apakah TTD dikonsumsi dalam 24 jam terakhir
-            $table->float('lila', 5, 2)->nullable(); // Lingkar lengan atas (LiLA) dalam cm
+            $table->string('lila')->nullable(); // Lingkar lengan atas (LiLA) dalam cm
             $table->enum('pmt_bumil_kek', ['Ya', 'Tidak'])->default('Tidak'); // Pemberian PMT untuk ibu hamil KEK
             $table->json('kelas_ibu_hamil')->nullable(); // Informasi kelas ibu hamil
             $table->json('skrining_jiwa')->nullable(); // Skrining kesehatan jiwa

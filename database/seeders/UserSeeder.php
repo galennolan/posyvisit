@@ -32,17 +32,21 @@ class UserSeeder extends Seeder
         ]);
         $admin->assignRole($adminRole);
 
-        // Membuat pengguna PetugasKesehatan
-        $petugasKesehatan = User::create([
-            'name' => 'Petugas Kesehatan',
-            'email' => 'petugaskesehatan@posyvisit.com',
-            'password' => bcrypt('password'),
-            'kecamatan' => 'Laweyan',
-            'kelurahan' => 'Purwosari',
-            'nama_posyandu' => 'Posyandu C',
-        ]);
-        $petugasKesehatan->assignRole($petugasKesehatanRole);
+        // Membuat pengguna PetugasKesehatan di 5 kecamatan dengan kelurahan dan posyandu null
+            
+        $kecamatanList = ['Banjarsari', 'Jebres', 'Laweyan', 'Pasar Kliwon', 'Serengan'];
 
+        foreach ($kecamatanList as $kecamatan) {
+            $petugasKesehatan = User::create([
+                'name' => 'Petugas Kesehatan ' . $kecamatan,
+                'email' => strtolower('petugaskesehatan.' . $kecamatan . '@posyvisit.com'),
+                'password' => bcrypt('password'),
+                'kecamatan' => $kecamatan,
+                'kelurahan' => null,
+                'nama_posyandu' => null,
+            ]);
+            $petugasKesehatan->assignRole($petugasKesehatanRole);
+        }
         // Membuat pengguna KetuaPosyandu
         $ketuaPosyandu = User::create([
             'name' => 'Ketua Posyandu',

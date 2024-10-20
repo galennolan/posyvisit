@@ -239,10 +239,7 @@
 
                     <!-- 18. Waktu Kunjungan dan 19. Tanggal Kunjungan (Satu Baris) -->
                     <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label for="waktu_kunjungan" class="block text-sm font-medium text-gray-700">18. Waktu Kunjungan</label>
-                            <input type="date" name="waktu_kunjungan" id="waktu_kunjungan" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ old('waktu_kunjungan', $kunjunganBayi->waktu_kunjungan) }}">
-                        </div>
+                      
                         <div>
                             <label for="tanggal_kunjungan" class="block text-sm font-medium text-gray-700">19. Tanggal Kunjungan</label>
                             <input type="date" name="tanggal_kunjungan" id="tanggal_kunjungan" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ old('tanggal_kunjungan', $kunjunganBayi->tanggal_kunjungan) }}">
@@ -366,9 +363,13 @@
 
 
                     <!-- Tombol Submit -->
-                    <div class="flex justify-end">
-                        <a href="{{ route('keluarga') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded mr-2">Batal</a>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Simpan Perubahan</button>
+                    <div class="flex justify-end items-center mt-6 space-x-2">
+                        <button type="submit" class="bg-gray-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
+                            Simpan Perubahan
+                        </button>
+                        <a href="{{ route('keluarga') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow text-center">
+                            Kembali
+                        </a>
                     </div>
                 </form>
             </div>

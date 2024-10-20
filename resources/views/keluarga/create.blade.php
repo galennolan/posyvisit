@@ -14,9 +14,9 @@
             </nav>
     </x-slot>
 
-    <div class="py-12 px-6 sm:px-8 lg:px-10">
+    <div class="py-12 px-0 sm:px-0 lg:px-0 w-full">
     <!-- Main Form Card -->
-        <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6 sm:p-8 space-y-6">
+         <div class="w-full bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6 sm:p-8 space-y-6">
 
             <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 rounded-lg shadow-lg">
                 <h3 class="text-2xl font-bold text-white tracking-wide uppercase">
@@ -27,7 +27,7 @@
 
             <form action="{{ route('keluarga.store') }}" method="POST" class="p-6 space-y-6">
                 @csrf
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-6 mx-0">
                     <!-- Tanggal Pengumpulan Data -->
                     <div class="col-span-1">
                         <label for="tanggal_pengumpulan_data" class="block text-sm font-medium text-gray-700">Tanggal Pengumpulan Data</label>
@@ -218,30 +218,27 @@
 
                 </div>
                 <input type="hidden" name="id_user" value="{{ auth()->user()->id }}"> <!-- Menyimpan ID user yang login -->
-                <!-- Section for Anggota Keluarga -->
-                <div class="bg-gray-100 rounded-lg p-4 mt-6">
-                    <h3 class="text-md font-semibold text-gray-700">Data Anggota Keluarga</h3>
-                    <div id="anggotaKeluargaContainer" class="mt-4 space-y-4">
+                <div class="w-full max-w-none bg-gray-100 rounded-lg p-4 mt-6">
+                <h3 class="text-md font-semibold text-gray-700">Data Anggota Keluarga</h3>
+                <div id="anggotaKeluargaContainer" class="mt-4 space-y-4">
                         <!-- Dynamic anggota keluarga form fields will be inserted here -->
                     </div>
 
                     <button type="button" id="addAnggotaButton" class="mt-3 inline-flex items-center px-4 py-2 border border-blue-600 rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Tambah Anggota
+                                               Tambah Anggota
                     </button>
 
                 </div>
 
-                <div class="flex justify-end mt-6">
-               
-                <button type="submit" class="ml-2 bg-gray-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
-                    Submit
-                </button>
-
-                <button type="reset" class="ml-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow">
-                    Reset
-                </button>
-
+                <div class="flex justify-end items-center mt-6 space-x-2">
+                    <button type="submit" class="bg-gray-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
+                        Submit
+                    </button>
+                    <a href="{{ route('keluarga') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow text-center">
+                        Kembali
+                    </a>
                 </div>
+
             </form>
         </div>
     </div>
@@ -281,32 +278,34 @@ $(document).ready(function() {
     function addAnggotaForm(index, data = {}) {
             anggotaCount++;
             let anggotaForm = `
-                <div class="grid  gap-4 p-5 bg-white rounded-md shadow-md border border-gray-200" id="anggota_${anggotaCount}">
-                    <div class="col-span-2 flex justify-between items-center">
+                <div class="grid gap-4 p-3 sm:p-5 bg-white rounded-md shadow-md border border-gray-200 w-full mx-0" id="anggota_${anggotaCount}">
+                <div class="flex justify-between items-center">
                         <h5 class="font-semibold">Anggota Keluarga ${anggotaCount}</h5>
                         <button type="button" class="text-red-600 hover:text-red-800" onclick="removeAnggota(${anggotaCount})">Hapus Anggota</button>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <!-- Nama Lengkap -->
-                    <div class="col-span-1">
+                
+                <div class="w-full">
+                    <!-- Nama Lengkap Input -->
+                    <div class="w-full">
                         <label for="nama_lengkap_${anggotaCount}" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
                         <input type="text" id="nama_lengkap_${anggotaCount}" name="anggota[${anggotaCount}][nama_lengkap]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                     </div>
 
-                    <!-- NIK -->
-                    <div class="col-span-1">
+                    <!-- NIK Input -->
+                    <div class="w-full">
                         <label for="nik_${anggotaCount}" class="block text-sm font-medium text-gray-700">NIK</label>
                         <input type="text" id="nik_${anggotaCount}" name="anggota[${anggotaCount}][nik]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                     </div>
 
-                    <!-- Tanggal Lahir -->
-                    <div class="col-span-1">
+                    <!-- Tanggal Lahir Input -->
+                    <div class="w-full">
                         <label for="tanggal_lahir_${anggotaCount}" class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
                         <input type="date" id="tanggal_lahir_${anggotaCount}" name="anggota[${anggotaCount}][tanggal_lahir]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                     </div>
+ 
 
                     <!-- Jenis Kelamin -->
-                    <div class="col-span-1">
+                    <div class="w-full">
                         <label for="jenis_kelamin_${anggotaCount}" class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
                         <select id="jenis_kelamin_${anggotaCount}" name="anggota[${anggotaCount}][jenis_kelamin]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                             <option value="Laki-Laki">Laki-Laki</option>
@@ -375,9 +374,9 @@ $(document).ready(function() {
                             <option value="Ibu Hamil">Ibu Hamil</option>
                             <option value="Ibu Bersalin & Nifas">Ibu Bersalin & Nifas</option>
                             <option value="Bayi - Balita (0-6 bulan)">Bayi - Balita (0-6 bulan)</option>
-                            <option value="Balita dan Apras (≥6 - 71 bulan)">Balita dan Apras (≥6 - 71 bulan)</option>
-                            <option value="Usia Sekolah & Remaja (≥6 - <18 tahun)">Usia Sekolah & Remaja (≥6 - <18 tahun)</option>
-                            <option value="Usia Dewasa (≥18-59 tahun)">Usia Dewasa (≥18-59 tahun)</option>
+                            <option value="Balita dan Apras (6 - 71 bulan)">Balita dan Apras (6 - 71 bulan)</option>
+                            <option value="Usia Sekolah & Remaja">Usia Sekolah & Remaja</option>
+                            <option value="Usia Dewasa (18-59 tahun)">Usia Dewasa (18-59 tahun)</option>
                             <option value="Lansia (≥60 tahun)">Lansia (≥60 tahun)</option>
                         </select>
                     </div>

@@ -9,14 +9,11 @@ class KunjunganRumahUsiaRemaja extends Model
 {
     use HasFactory;
     // Define the table name if it's not default ('kunjungan_rumah_usia_remaja')
-    protected $table = 'kunjungan_rumah_usia_remaja';
+    protected $table = 'kunjungan_rumah_usia_sekolah_remaja';
 
     // Add fillable fields to allow mass assignment
     protected $fillable = [
-        'nama',
-        'tempat_lahir',
-        'tanggal_lahir',
-        'jenis_kelamin',
+        'anggota_keluarga_id',
         'waktu_kunjungan',
         'tanggal_kunjungan',
         'suhu_tubuh',
@@ -24,13 +21,22 @@ class KunjunganRumahUsiaRemaja extends Model
         'isi_piringku',
         'bb',
         'tb',
+        'lp',
         'ada_ttd',
         'minum_ttd',
-        'tanggal_pemeriksaan_anemia',
+        'tanggal_pemeriksaan_1',
+        'tempat_pemeriksaan_1',
+        'hasil_pemeriksaan_1',
         'perilaku_merokok',
-        'tekanan_darah_tanggal',
-        'gula_darah_tanggal',
-        'skring_kesehatan_jiwa_tanggal',
+        'tanggal_pemeriksaan_gula',
+        'tempat_pemeriksaan_gula',
+        'hasil_pemeriksaan_gula',
+        'tanggal_pemeriksaan_tekanan',
+        'tempat_pemeriksaan_tekanan',
+        'hasil_pemeriksaan_tekanan',
+        'tanggal_skrining_jiwa',
+        'tempat_skrining_jiwa',
+        'hasil_skrining_jiwa',
         'pemberian_edukasi',
         'paraf_remaja',
     ];

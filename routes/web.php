@@ -10,6 +10,12 @@ use App\Http\Controllers\KunjunganBayiController;
 use App\Http\Controllers\KunjunganRumahBalitaAprasController;
 use App\Http\Controllers\KunjunganIbuBersalinNifasController;
 use App\Http\Controllers\KunjunganRumahUsiaRemajaController;
+use App\Http\Controllers\KunjunganUsiaDewasaController;
+use App\Http\Controllers\KunjunganTBCController;
+use App\Http\Controllers\KunjunganLansiaController;
+use App\Http\Controllers\StatistikController;
+
+
 
 use App\Exports\KeluargaExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -61,6 +67,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/keluarga/{id}', [KeluargaController::class, 'destroy'])->name('keluarga.destroy');
 
     Route::post('/keluarga/filter', [KeluargaController::class, 'indexWithFilter'])->name('keluarga.filter');
+
+    
+    Route::get('/statistik', [StatistikController::class, 'index'])->name('statistik');
 });
 
 
@@ -69,4 +78,13 @@ Route::resource('kunjungan-ibu-bersalin', KunjunganIbuBersalinNifasController::c
 Route::resource('kunjungan-bayi', KunjunganBayiController::class);
 Route::resource('kunjungan-rumah-balita-apras', KunjunganRumahBalitaAprasController::class);
 Route::resource('kunjungan-rumah-usia-remaja', KunjunganRumahUsiaRemajaController::class);
+Route::resource('kunjungan-usia-dewasa', KunjunganUsiaDewasaController::class);
+
+Route::resource('kunjungan-tbc', KunjunganTBCController::class);
+Route::resource('kunjungan-lansia', KunjunganLansiaController::class);
+
+Route::get('/about-us', function () {
+    return view('about-us');
+})->name('about-us');
+
 require __DIR__.'/auth.php';

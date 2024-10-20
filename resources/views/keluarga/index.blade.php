@@ -49,16 +49,16 @@
                 </form>
             </div>
 
-                <div class="table-responsive">
-                    <table id="keluargaTable" class="min-w-full divide-y divide-gray-200">
+                <div class="table-responsive overflow-x-auto bg-white shadow sm:rounded-lg p-4">
+                    <table id="keluargaTable" class="min-w-full divide-y divide-gray-200 table-auto">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-4 py-2 text-left text-sm font-semibold text-gray-500">No</th>
-                                <th class="px-4 py-2 text-left text-sm font-semibold text-gray-500">Nama Kepala Keluarga</th>
-                                <th class="px-4 py-2 text-left text-sm font-semibold text-gray-500">Alamat</th>
-                                <th class="px-4 py-2 text-left text-sm font-semibold text-gray-500">No Handphone</th>
-                                <th class="px-4 py-2 text-left text-sm font-semibold text-gray-500">Anggota Keluarga</th>
-                                <th class="px-4 py-2 text-left text-sm font-semibold text-gray-500">Aksi</th> <!-- Tombol Aksi -->
+                                <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Kepala Keluarga</th>
+                                <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alamat</th>
+                                <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No Handphone</th>
+                                <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggota Keluarga</th>
+                                <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th> <!-- Tombol Aksi -->
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -69,11 +69,13 @@
                                         $anggota = $keluarga->anggotaKeluarga->firstWhere('hubungan_kk', 1);
                                     @endphp
                                     {{ $anggota ? $anggota->nama_lengkap : '-' }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-700">{{ \Illuminate\Support\Str::limit($keluarga->alamat, 35, '...') }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-700">{{ $keluarga->no_handphone }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-700">
-                                        <ul class="list-disc pl-5">
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{{ \Illuminate\Support\Str::limit($keluarga->alamat, 35, '...') }}</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{{ $keluarga->no_handphone }}</td>
+                                    <td class="px-4 py-2 whitespace-normal text-sm text-gray-700">
+                                         <ul class="list-disc pl-5 space-y-2">
+                                            
                                         @foreach($keluarga->anggotaKeluarga as $anggota)
+                                        <li>
                                         @if($anggota->kelompok_sasaran === 'Ibu Hamil')
                                             @php
                                                 // Cek apakah anggota ini memiliki data kunjungan Ibu Hamil
@@ -128,7 +130,7 @@
                                                 </a>)
                                             @endif
 
-                                            @elseif($anggota->kelompok_sasaran === 'Balita dan Apras (≥6 - 71 bulan)')
+                                            @elseif($anggota->kelompok_sasaran === 'Balita dan Apras (6 - 71 bulan)')
                                             @php
                                                 // Ambil data kunjungan balita apras
                                                 $kunjunganBalitaApras = $anggota->kunjunganRumahBalitaApras;
@@ -145,7 +147,7 @@
                                                     {{ $anggota->kelompok_sasaran }}
                                                 </a>)
                                             @endif
-                                            @elseif($anggota->kelompok_sasaran === 'Usia Sekolah & Remaja (≥6 - 18 tahun)')
+                                            @elseif($anggota->kelompok_sasaran === 'Usia Sekolah & Remaja')
                                             @php
                                                 // Ambil data kunjungan-remaja
                                                 $kunjunganRemaja = $anggota->kunjunganRemaja;
@@ -153,7 +155,7 @@
                                             {{ $anggota->nama_lengkap }} ({{ $anggota->nik }},
                                             @if($kunjunganRemaja)
                                                 <!-- Jika data kunjungan-remaja ada, arahkan ke halaman edit -->
-                                                <a href="{{ route('kunjungan-rumah-usia-remaja.edit', ['kunjungan_remaja' => $kunjunganRemaja->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                <a href="{{ route('kunjungan-rumah-usia-remaja.edit', ['kunjungan_rumah_usia_remaja' => $kunjunganRemaja->id]) }}" class="text-blue-600 hover:text-blue-800">
                                                     {{ $anggota->kelompok_sasaran }}
                                                 </a>)
                                             @else
@@ -162,10 +164,65 @@
                                                     {{ $anggota->kelompok_sasaran }}
                                                 </a>)
                                             @endif
+                                            @elseif($anggota->kelompok_sasaran === 'Usia Dewasa (18-59 tahun)')
+                                            @php
+                                                // Ambil data kunjungan-usia-dewasa
+                                                $kunjunganDewasa = $anggota->kunjunganUsiaDewasa;
+                                            @endphp
+                                            {{ $anggota->nama_lengkap }} ({{ $anggota->nik }},
+                                            @if($kunjunganDewasa)
+                                                <!-- Jika data kunjungan-usia-dewasa ada, arahkan ke halaman edit -->
+                                                <a href="{{ route('kunjungan-usia-dewasa.edit', ['kunjungan_usia_dewasa' => $kunjunganDewasa->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @else
+                                                <!-- Jika data kunjungan-usia-dewasa tidak ada, arahkan ke halaman create -->
+                                                <a href="{{ route('kunjungan-usia-dewasa.create', ['anggota_keluarga_id' => $anggota->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @endif
+
+                                        @elseif($anggota->kelompok_sasaran === 'TBC')
+                                            @php
+                                                // Ambil data kunjungan-tbc
+                                                $kunjunganTBC = $anggota->kunjunganTBC;
+                                            @endphp
+                                            {{ $anggota->nama_lengkap }} ({{ $anggota->nik }},
+                                            @if($kunjunganTBC)
+                                                <!-- Jika data kunjungan-tbc ada, arahkan ke halaman edit -->
+                                                <a href="{{ route('kunjungan-tbc.edit', ['kunjungan_tbc' => $kunjunganTBC->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @else
+                                                <!-- Jika data kunjungan-tbc tidak ada, arahkan ke halaman create -->
+                                                <a href="{{ route('kunjungan-tbc.create', ['anggota_keluarga_id' => $anggota->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @endif
+
+                                        @elseif($anggota->kelompok_sasaran === 'Lansia (≥60 tahun)')
+                                            @php
+                                                // Ambil data kunjungan-lansia
+                                                $kunjunganLansia = $anggota->kunjunganLansia;
+                                            @endphp
+                                            {{ $anggota->nama_lengkap }} ({{ $anggota->nik }},
+                                            @if($kunjunganLansia)
+                                                <!-- Jika data kunjungan-lansia ada, arahkan ke halaman edit -->
+                                                <a href="{{ route('kunjungan-lansia.edit', $kunjunganLansia->id) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>
+                                                                                       
+                                            @else
+                                                <!-- Jika data kunjungan-lansia tidak ada, arahkan ke halaman create -->
+                                                <a href="{{ route('kunjungan-lansia.create', ['anggota_keluarga_id' => $anggota->id]) }}" class="text-blue-600 hover:text-blue-800">
+                                                    {{ $anggota->kelompok_sasaran }}
+                                                </a>)
+                                            @endif
                                         @else
                                             <!-- Jika bukan kelompok sasaran Ibu Hamil, Ibu Bersalin & Nifas, atau Bayi - Balita, tampilkan tanpa tautan -->
                                             {{ $anggota->nama_lengkap }} ({{ $anggota->nik }}, {{ $anggota->kelompok_sasaran }})
                                         @endif
+                                        </li>
                                     @endforeach
 
 
@@ -175,11 +232,14 @@
                                     </td>
                                     <td class="px-4 py-2 flex justify-center items-center space-x-2">
                                             <!-- Tombol untuk menampilkan modal detail (ikon kaca pembesar) -->
-                                            <button class="text-blue-500 hover:text-blue-700" onclick="showKeluargaDetail({{ $keluarga->id }})" title="Lihat Detail Keluarga">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                            <!-- Tombol untuk menampilkan modal detail (ikon kaca pembesar) -->
+                                            <button class="text-blue-500 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full p-2" 
+                                                    onclick="showKeluargaDetail({{ $keluarga->id }})" title="Lihat Detail Keluarga">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 sm:w-8 sm:h-8">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a4 4 0 11-8 0 4 4 0 018 0zM21 21l-4.35-4.35" />
                                                 </svg>
                                             </button>
+
 
                                            <!-- Tombol untuk mengedit keluarga -->
                                             <a href="{{ route('keluarga.edit', $keluarga->id) }}" class="text-yellow-500 hover:text-yellow-700" title="Edit Keluarga">

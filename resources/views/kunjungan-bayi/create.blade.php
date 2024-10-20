@@ -76,17 +76,11 @@
 
                     <!-- Jenis Kelamin -->
                     <div class="mb-4">
-                        <label for="jenis_kelamin" class="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                        <label for="jenis_kelamin" class="block text-sm font-medium text-gray-700">1. Jenis Kelamin</label>
                         <select name="jenis_kelamin" id="jenis_kelamin" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                         <option value="Laki-laki" {{ old('jenis_kelamin', $anggotaKeluarga->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                         <option value="Perempuan" {{ old('jenis_kelamin', $anggotaKeluarga->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                         </select>
-                    </div>
-
-                    <!-- 1. Waktu Kunjungan -->
-                    <div class="mb-4">
-                        <label for="waktu_kunjungan" class="block text-sm font-medium text-gray-700">1. Waktu Kunjungan</label>
-                        <input type="date" name="waktu_kunjungan" id="waktu_kunjungan" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ old('waktu_kunjungan') }}">
                     </div>
 
                     <!-- 2. Tanggal -->
@@ -260,17 +254,7 @@
                         </div>
                     </div>
 
-                     <!-- 18. Waktu Kunjungan dan 19. Tanggal Kunjungan (Satu Baris) -->
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label for="waktu_kunjungan" class="block text-sm font-medium text-gray-700">18. Waktu Kunjungan</label>
-                            <input type="date" name="waktu_kunjungan" id="waktu_kunjungan" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ old('waktu_kunjungan') }}">
-                        </div>
-                        <div>
-                            <label for="tanggal_kunjungan" class="block text-sm font-medium text-gray-700">19. Tanggal Kunjungan</label>
-                            <input type="date" name="tanggal_kunjungan" id="tanggal_kunjungan" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ old('tanggal_kunjungan') }}">
-                        </div>
-                    </div>
+                  
 
                     <!-- 20. Napas, 21. Aktivitas, 22. Warna Kulit (Satu Baris) -->
                     <div class="grid grid-cols-3 gap-4 mb-4">
@@ -388,9 +372,13 @@
                     </div>
 
                     <!-- Tombol Submit -->
-                    <div class="flex justify-end">
-                        <a href="{{ route('kunjungan-bayi.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded mr-2">Batal</a>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Simpan</button>
+                    <div class="flex justify-end items-center mt-6 space-x-2">
+                        <button type="submit" class="bg-gray-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
+                            Submit
+                        </button>
+                        <a href="{{ route('keluarga') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow text-center">
+                            Kembali
+                        </a>
                     </div>
                 </form>
             </div>

@@ -135,15 +135,14 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <div class="flex justify-end mt-6">
-                            <!-- Tombol Kembali -->
-                            <a href="{{ route('keluarga') }}" class="ml-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow inline-block text-center">
-                            Kembali
-                        </a>
-                            <button type="submit" class="ml-2 bg-gray-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
-                            Simpan Perubahan
-                        </button>
-                    </div>
+                        <div class="flex justify-end items-center mt-6 space-x-2">
+                            <button type="submit" class="bg-gray-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow">
+                                Submit
+                            </button>
+                            <a href="{{ route('keluarga') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow text-center">
+                                Kembali
+                            </a>
+                        </div>
 
                     
                         
