@@ -29,49 +29,80 @@ SIMPONIKU adalah aplikasi digital untuk membantu pencatatan dan pemantauan kunju
   - **Ketua Posyandu**: Mengakses data posyandu tertentu yang ia kelola.
 
 ---
-Cara Penggunaan
-1. Login ke Aplikasi
-Masuk menggunakan email dan password sesuai peran pengguna.
-2. Menambah Data Keluarga
-Akses menu Kunjungan Rumah dan isi data lengkap keluarga dan anggota.
-Pilih Kelompok Sasaran yang sesuai untuk setiap anggota keluarga.
-3. Melihat Statistik
-Akses menu Statistik dan gunakan Filter Kecamatan, Kelurahan, atau Posyandu.
-Admin dan petugas kesehatan bisa melihat seluruh data, sedangkan ketua posyandu hanya melihat data posyandunya.
-Kelompok Sasaran dalam Kunjungan Harian
-Ibu Hamil: Pemantauan kesehatan ibu selama masa kehamilan.
-Ibu Bersalin & Nifas: Pemulihan pasca melahirkan dan pemberian ASI.
-Bayi - Balita (0-6 bulan): Pemberian imunisasi dan pemantauan tumbuh kembang.
-Balita dan Apras (6-71 bulan): Monitoring gizi dan imunisasi lanjutan.
-Usia Sekolah & Remaja: Edukasi dan pemantauan kesehatan remaja.
-Usia Dewasa (18-59 tahun): Pemantauan penyakit seperti hipertensi dan diabetes.
-Lansia (≥60 tahun): Pemantauan kesehatan rutin untuk lansia.
-Teknologi yang Digunakan
-Backend: Laravel
-Frontend: Bootstrap, Blade Templates
-Database: MySQL
-Authentication: Laravel Passport
-Role Management: Spatie Laravel Permissions
-Akses Statistik Berdasarkan Peran
-Admin: Melihat seluruh data posyandu di semua wilayah.
-Petugas Kesehatan Kecamatan: Melihat data seluruh posyandu di kecamatannya.
-Ketua Posyandu: Melihat data posyandu tertentu yang dikelolanya.
-Kebutuhan Sistem
-PHP: >= 8.0
-Composer: >= 2.0
-MySQL: >= 5.7
-Node.js: >= 14.x
-Pengembangan dan Kontribusi
-Fork repository ini.
-Buat branch baru untuk fitur yang ingin dikembangkan.
-Setelah selesai, buat Pull Request ke branch main.
-Lisensi
-Aplikasi ini dilisensikan di bawah MIT License.
+## Cara Penggunaan
 
-Kontak
-Jika ada pertanyaan atau butuh bantuan, hubungi:
+1. **Login ke Aplikasi**  
+   Masuk menggunakan email dan password sesuai dengan peran pengguna (Admin, Petugas Kesehatan, atau Ketua Posyandu).
 
-Email: galihsetyawan29@gmail.com
+2. **Menambah Data Keluarga**  
+   - Akses menu **Kunjungan Rumah** dan isi data lengkap keluarga serta anggota.
+   - Pilih **Kelompok Sasaran** yang sesuai untuk setiap anggota keluarga.
+
+3. **Melihat Statistik**  
+   - Akses menu **Statistik** dan gunakan **Filter Kecamatan, Kelurahan, atau Posyandu** untuk melihat data spesifik.
+   - **Admin** dan **Petugas Kesehatan** dapat melihat semua data.
+   - **Ketua Posyandu** hanya dapat melihat data posyandu yang ia kelola.
+
+---
+
+## Kelompok Sasaran dalam Kunjungan Harian
+
+- **Ibu Hamil**: Pemantauan kesehatan ibu selama masa kehamilan.
+- **Ibu Bersalin & Nifas**: Pemulihan pasca melahirkan dan pemberian ASI.
+- **Bayi - Balita (0-6 bulan)**: Pemberian imunisasi dan pemantauan tumbuh kembang.
+- **Balita dan Apras (6-71 bulan)**: Monitoring gizi dan imunisasi lanjutan.
+- **Usia Sekolah & Remaja**: Edukasi dan pemantauan kesehatan remaja.
+- **Usia Dewasa (18-59 tahun)**: Pemantauan penyakit seperti hipertensi dan diabetes.
+- **Lansia (≥60 tahun)**: Pemantauan kesehatan rutin untuk lansia.
+
+---
+
+## Teknologi yang Digunakan
+
+- **Backend**: Laravel  
+- **Frontend**: Bootstrap, Blade Templates  
+- **Database**: MySQL  
+- **Authentication**: Laravel Passport  
+- **Role Management**: Spatie Laravel Permissions  
+
+---
+
+## Akses Statistik Berdasarkan Peran
+
+- **Admin**: Melihat seluruh data posyandu di semua wilayah.
+- **Petugas Kesehatan Kecamatan**: Melihat data seluruh posyandu di kecamatannya.
+- **Ketua Posyandu**: Melihat data posyandu tertentu yang ia kelola.
+
+---
+
+## Kebutuhan Sistem
+
+- **PHP**: >= 8.0  
+- **Composer**: >= 2.0  
+- **MySQL**: >= 5.7  
+- **Node.js**: >= 14.x  
+
+---
+
+## Pengembangan dan Kontribusi
+
+1. **Fork** repository ini.
+2. Buat **branch baru** untuk fitur yang ingin dikembangkan.
+3. Setelah selesai, buat **Pull Request** ke branch `main`.
+
+---
+
+## Lisensi
+
+Aplikasi ini dilisensikan di bawah [MIT License](https://opensource.org/licenses/MIT).
+
+---
+
+## Kontak
+
+Jika ada pertanyaan atau butuh bantuan, hubungi:  
+- **Email**: galihsetyawan29@gmail.com
+
 
 ![Demo Aplikasi](demo.gif)
 
