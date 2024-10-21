@@ -33,7 +33,10 @@ class StatistikController extends Controller
         // Jika user adalah KetuaPosyandu, hanya tampilkan posyandunya
         if ($user->hasRole('KetuaPosyandu')) {
             $posyandus = [$user->nama_posyandu];
-        } else {
+        } elseif ($user->hasRole('admin')) {
+            // Untuk admin, tampilkan semua kecamatan
+            $kecamatans = ['Banjarsari', 'Jebres', 'Laweyan', 'Pasar Kliwon', 'Serengan'];
+        }else {
             // Ambil semua posyandu yang ada di tabel User jika bukan KetuaPosyandu
             $posyandus = User::select('nama_posyandu')->distinct()->pluck('nama_posyandu');
         }
@@ -48,7 +51,13 @@ class StatistikController extends Controller
 
         if ($kelurahan !== 'all') {
             $query->where('kelurahan', $kelurahan);
-        }
+        }else {
+            // Jika tidak ada kelurahan yang dipilih, ambil semua kelurahan di kecamatan yang dipilih
+            if ($kecamatan !== 'all') {
+                // Ambil hanya kelurahan yang sesuai dengan kecamatan yang dipilih
+                $kelurahans = Keluarga::where('kecamatan', $kecamatan)
+                    ->select('kelurahan')->distinct()->pluck('kelurahan');
+        }}
 
         if ($posyandu !== 'all') {
             $query->where('pustu', $posyandu);
@@ -71,6 +80,31 @@ class StatistikController extends Controller
                 return $keluarga->anggotaKeluarga->count();
             })
         ];
+
+         // Fungsi untuk menghitung kategori berdasarkan kelompok_sasaran
+         $calculateCategory = function ($keluargas, $kategori) {
+            return $keluargas->sum(function($keluarga) use ($kategori) {
+                return $keluarga->anggotaKeluarga->where('kelompok_sasaran', $kategori)->count();
+            });
+        };
+
+        // Hitung kategori untuk masing-masing kelompok sasaran
+        $jumlahIbuHamil = $calculateCategory($keluargas, 'Ibu Hamil');
+        $jumlahIbuBersalinNifas = $calculateCategory($keluargas, 'Ibu Bersalin & Nifas');
+        $jumlahBayiBalita = $calculateCategory($keluargas, 'Bayi - Balita (0-6 bulan)');
+        $jumlahBayiApras = $calculateCategory($keluargas, 'Balita dan Apras (6 - 71 bulan)');
+        $jumlahUsiaSekolahRemaja = $calculateCategory($keluargas, 'Usia Sekolah & Remaja');
+        $jumlahUsiaDewasa = $calculateCategory($keluargas, 'Usia Dewasa (18-59 tahun)');
+        $jumlahLansia = $calculateCategory($keluargas, 'Lansia (≥60 tahun)');
+
+        // Tambahkan ke array statistik
+        $statistik['jumlahIbuHamil'] = $jumlahIbuHamil;
+        $statistik['jumlahIbuBersalinNifas'] = $jumlahIbuBersalinNifas;
+        $statistik['jumlahBayiBalita'] = $jumlahBayiBalita;
+        $statistik['jumlahBayiApras'] = $jumlahBayiApras;
+        $statistik['jumlahUsiaSekolahRemaja'] = $jumlahUsiaSekolahRemaja;
+        $statistik['jumlahUsiaDewasa'] = $jumlahUsiaDewasa;
+        $statistik['jumlahLansia'] = $jumlahLansia;
 
         // Tampilkan view statistik dengan data yang sudah difilter
         return view('statistik', compact('statistik', 'kecamatans', 'posyandus', 'kecamatan', 'kelurahan', 'posyandu'));

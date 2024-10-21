@@ -115,6 +115,35 @@
                                 <h2 class="font-bold text-xl mb-2">Jumlah Anggota Keluarga</h2>
                                 <p class="text-5xl font-bold">{{ $statistik['jumlahAnggotaKeluarga'] }}</p>
                             </div>
+                              <!-- Statistik Kelompok Sasaran -->
+                              <div class="bg-green-100 p-6 rounded-lg shadow-lg text-center">
+                                <h2 class="font-bold text-xl mb-2">Jumlah Ibu Hamil</h2>
+                                <p class="text-5xl font-bold">{{ $statistik['jumlahIbuHamil'] }}</p>
+                            </div>
+                            <div class="bg-yellow-100 p-6 rounded-lg shadow-lg text-center">
+                                <h2 class="font-bold text-xl mb-2">Jumlah Ibu Bersalin & Nifas</h2>
+                                <p class="text-5xl font-bold">{{ $statistik['jumlahIbuBersalinNifas'] }}</p>
+                            </div>
+                            <div class="bg-pink-100 p-6 rounded-lg shadow-lg text-center">
+                                <h2 class="font-bold text-xl mb-2">Jumlah Bayi - Balita (0-6 bulan)</h2>
+                                <p class="text-5xl font-bold">{{ $statistik['jumlahBayiBalita'] }}</p>
+                            </div>
+                            <div class="bg-red-100 p-6 rounded-lg shadow-lg text-center">
+                                <h2 class="font-bold text-xl mb-2">Jumlah Balita dan Apras (6 - 71 bulan)</h2>
+                                <p class="text-5xl font-bold">{{ $statistik['jumlahBayiApras'] }}</p>
+                            </div>
+                            <div class="bg-indigo-100 p-6 rounded-lg shadow-lg text-center">
+                                <h2 class="font-bold text-xl mb-2">Jumlah Usia Sekolah & Remaja</h2>
+                                <p class="text-5xl font-bold">{{ $statistik['jumlahUsiaSekolahRemaja'] }}</p>
+                            </div>
+                            <div class="bg-gray-100 p-6 rounded-lg shadow-lg text-center">
+                                <h2 class="font-bold text-xl mb-2">Jumlah Usia Dewasa (18-59 tahun)</h2>
+                                <p class="text-5xl font-bold">{{ $statistik['jumlahUsiaDewasa'] }}</p>
+                            </div>
+                            <div class="bg-teal-100 p-6 rounded-lg shadow-lg text-center">
+                                <h2 class="font-bold text-xl mb-2">Jumlah Lansia (≥60 tahun)</h2>
+                                <p class="text-5xl font-bold">{{ $statistik['jumlahLansia'] }}</p>
+                            </div>
                         </div>
                     @endif
                 </div>
